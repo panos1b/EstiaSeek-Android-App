@@ -1,8 +1,8 @@
 Copyright © 2024 Panagiotis (Panayiotis) Alexandros Daskalopoulos, Ekerem Chena, Evangelos Talos. All rights reserved.
 
-Unauthorized copying, distribution, modification, or use of this software and associated documentation, in whole or in part, is strictly prohibited without prior written permission from the copyright ownerss.
+Unauthorized copying, distribution, modification, or use of this software and associated documentation, in whole or in part, is strictly prohibited without prior written permission from the copyright owners.
 
-This repository and its contents are proprietary and confidential. No part of this repository may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the copyright owner, except in the case of brief quotations embodied in critical reviews and certain other noncommercial uses permitted by copyright law.
+This repository and its contents are proprietary and confidential. No part of this repository may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the copyright owners, except in the case of brief quotations embodied in critical reviews and certain other noncommercial uses permitted by copyright law.
 
 For permission requests or inquiries, please contact <PanosDask03@gmail.com>.
 
