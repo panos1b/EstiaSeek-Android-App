@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">EstiaSeek</string>
+    <string name="search_candidates">Search Candidates</string>
+    <string name="job_title">Job Title</string>
+    <string name="location">Location</string>
+    <string name="experience_level">Experience Level</string>
+    <string name="search">Search</string>
 </resources>
