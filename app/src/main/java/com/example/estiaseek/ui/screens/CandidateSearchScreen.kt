@@ -18,7 +18,7 @@ fun CandidateSearchScreen() {
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
 
-    val jobTitles = listOf("Server", "Chef", "Bartender", "Receptionist")
+    val jobTitles = listOf("Any", "Server", "Chef", "Bartender", "Receptionist")
     val locations = listOf(
         "Any",
         "Attica",
