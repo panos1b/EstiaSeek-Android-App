@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EstiaSeek</string>
+    <string name="results"> Results</string>
+    <string name="results_based_on_search_terms">Results based on your search terms</string>
 </resources>
