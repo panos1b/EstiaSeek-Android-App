@@ -1,7 +1,9 @@
 package com.example.estiaseek.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
@@ -12,9 +14,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun CandidateSearchScreen() {
@@ -36,63 +42,112 @@ fun CandidateSearchScreen() {
     )
     val experienceLevels = listOf("Any", "Entry Level", "Intermediate", "Senior")
 
-    Column(
+    Box(
         modifier = Modifier
-            .padding(horizontal = 40.dp)
-            .verticalScroll(rememberScrollState())
-            .safeDrawingPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.surface,
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(R.string.search_candidates),
-            style = MaterialTheme.typography.headlineMedium,
+        Column(
             modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
-                .align(Alignment.Start)
-        )
-
-        DropdownMenuField(
-            label = R.string.job_title,
-            options = jobTitles,
-            selectedOption = selectedJobTitle,
-            onOptionSelected = { selectedJobTitle = it },
-            icon = Icons.Default.Person,
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
-        )
-
-        DropdownMenuField(
-            label = R.string.location,
-            options = locations,
-            selectedOption = selectedLocation,
-            onOptionSelected = { selectedLocation = it },
-            icon = Icons.Default.LocationOn,
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
-        )
-
-        DropdownMenuField(
-            label = R.string.experience_level,
-            options = experienceLevels,
-            selectedOption = selectedExperience,
-            onOptionSelected = { selectedExperience = it },
-            icon = Icons.Default.Star,
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
-        )
-
-
-        Button(
-            onClick = { /* Search action to be implemented */ },
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState())
+                .safeDrawingPadding()
+                .padding(vertical = 24.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Text(stringResource(R.string.search))
+            // Header Section
+            Column(
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.search_candidates),
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = stringResource(R.string.search_message),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            // Search Fields Card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    DropdownMenuField(
+                        label = R.string.job_title,
+                        options = jobTitles,
+                        selectedOption = selectedJobTitle,
+                        onOptionSelected = { selectedJobTitle = it },
+                        icon = Icons.Rounded.Person,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    DropdownMenuField(
+                        label = R.string.location,
+                        options = locations,
+                        selectedOption = selectedLocation,
+                        onOptionSelected = { selectedLocation = it },
+                        icon = Icons.Rounded.LocationOn,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    DropdownMenuField(
+                        label = R.string.experience_level,
+                        options = experienceLevels,
+                        selectedOption = selectedExperience,
+                        onOptionSelected = { selectedExperience = it },
+                        icon = Icons.Rounded.Star,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
+            // Search Button
+            Button(
+                onClick = { /* Search action to be implemented */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Rounded.Search, contentDescription = null)
+                    Text(
+                        stringResource(R.string.search),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
+            }
         }
     }
 }
