@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 
 @Composable
@@ -28,19 +29,12 @@ fun CandidateSearchScreen() {
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
 
-    val jobTitles = listOf("Any", "Server", "Chef", "Bartender", "Receptionist")
-    val locations = listOf(
-        "Any",
-        "Attica",
-        "Macedonia and Thrace",
-        "Epirus and Western Macedonia",
-        "Thessaly and Central Greece",
-        "Peloponnese and Western Greece",
-        "Aegean",
-        "Crete",
-        "Monastic community of Mount Athos"
-    )
-    val experienceLevels = listOf("Any", "Entry Level", "Intermediate", "Senior")
+    val context = LocalContext.current
+
+    // Get the string arrays from resources
+    val jobTitles = context.resources.getStringArray(R.array.job_titles).toList()
+    val locations = context.resources.getStringArray(R.array.locations).toList()
+    val experienceLevels = context.resources.getStringArray(R.array.experience_levels).toList()
 
     Box(
         modifier = Modifier
