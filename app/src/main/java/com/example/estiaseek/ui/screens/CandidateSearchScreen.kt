@@ -3,6 +3,7 @@ package com.example.estiaseek.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +12,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Star
 
 @Composable
 fun CandidateSearchScreen() {
@@ -53,6 +57,7 @@ fun CandidateSearchScreen() {
             options = jobTitles,
             selectedOption = selectedJobTitle,
             onOptionSelected = { selectedJobTitle = it },
+            icon = Icons.Default.Person,
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -63,6 +68,7 @@ fun CandidateSearchScreen() {
             options = locations,
             selectedOption = selectedLocation,
             onOptionSelected = { selectedLocation = it },
+            icon = Icons.Default.LocationOn,
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -73,10 +79,12 @@ fun CandidateSearchScreen() {
             options = experienceLevels,
             selectedOption = selectedExperience,
             onOptionSelected = { selectedExperience = it },
+            icon = Icons.Default.Star,
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
         )
+
 
         Button(
             onClick = { /* Search action to be implemented */ },

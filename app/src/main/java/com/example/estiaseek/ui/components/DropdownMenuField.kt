@@ -17,6 +17,7 @@ import com.example.estiaseek.R
 import androidx.compose.foundation.border
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
@@ -25,7 +26,8 @@ fun DropdownMenuField(
     @StringRes label: Int,
     options: List<String>,
     selectedOption: String? = null,
-    onOptionSelected: (String) -> Unit
+    onOptionSelected: (String) -> Unit,
+    icon: ImageVector? = null // Add an optional icon parameter
 ) {
     // Ensure a valid initial selected option
     val initialSelected = selectedOption?.takeIf { it.isNotEmpty() } ?: options.firstOrNull().orEmpty()
@@ -52,6 +54,18 @@ fun DropdownMenuField(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Add an optional icon to the left
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    modifier = Modifier
+                        .padding(end = 8.dp) // Add spacing between icon and text
+                        .size(24.dp) // Set icon size
+                )
+            }
+
             // Label and selected option
             Column(modifier = Modifier.weight(1f)) {
                 Text(
