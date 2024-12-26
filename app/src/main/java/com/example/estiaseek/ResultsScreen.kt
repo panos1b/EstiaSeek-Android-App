@@ -173,6 +173,12 @@ fun ResultsScreen() {
 
 @Composable
 @Preview(showBackground = false)
+fun PreviewResults() {
+    ResultsScreen()
+}
+
+@Composable
+@Preview(showBackground = false)
 fun PreviewBottomNavigationBar() {
     val navController = rememberNavController()
     BottomNavigationBar(navController = navController)
