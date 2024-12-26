@@ -1,6 +1,9 @@
 package com.example.estiaseek.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,6 +20,11 @@ import com.example.estiaseek.R
 import androidx.compose.foundation.border
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
@@ -25,69 +33,101 @@ fun DropdownMenuField(
     @StringRes label: Int,
     options: List<String>,
     selectedOption: String? = null,
-    onOptionSelected: (String) -> Unit
-) {
-    // Ensure a valid initial selected option
-    val initialSelected = selectedOption?.takeIf { it.isNotEmpty() } ?: options.firstOrNull().orEmpty()
+    onOptionSelected: (String) -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null
 
-    // Initialize the selected option state
+) {
+    val initialSelected = selectedOption?.takeIf { it.isNotEmpty() } ?: options.firstOrNull().orEmpty()
     var selected by remember { mutableStateOf(initialSelected) }
     var expanded by remember { mutableStateOf(false) }
 
+    // Animation for dropdown arrow rotation
+    val rotationState by animateFloatAsState(
+        targetValue = if (expanded) 180f else 0f,
+        label = "dropdown rotation"
+    )
+
     Box(modifier = modifier) {
-        // Main clickable box
-        Row(
+        OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true }
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = MaterialTheme.shapes.medium
-                )
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    shape = MaterialTheme.shapes.medium
-                )
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .clickable { expanded = true },
+            shape = RoundedCornerShape(12.dp),
         ) {
-            // Label and selected option
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(label),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = selected,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (leadingIcon != null) {
+                        Box(modifier = Modifier.padding(end = 8.dp)) {
+                            leadingIcon()
+                        }
+                    }
+
+                    Column {
+                        Text(
+                            text = stringResource(label),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        )
+                        Text(
+                            text = selected.ifEmpty { "Select" },
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = if (selected.isEmpty())
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            else
+                                MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = Icons.Rounded.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier = Modifier.rotate(rotationState),
+                    tint = if (expanded)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
-
-            // Dropdown arrow icon
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
-            )
         }
 
-        // Dropdown menu
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                    RoundedCornerShape(12.dp)
+                )
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            text = option,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (option == selected)
+                                MaterialTheme.colorScheme.primary
+                            else
+                                MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     onClick = {
-                        selected = option // Update the selected option
-                        onOptionSelected(option) // Notify parent
+                        selected = option
+                        onOptionSelected(option)
                         expanded = false
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
