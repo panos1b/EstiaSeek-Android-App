@@ -83,7 +83,7 @@ fun CreateApplicant() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                    .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 OutlinedTextField(
@@ -149,7 +149,7 @@ fun CreateApplicant() {
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .then(fieldModifier),
                 shape = fieldShape,
                 leadingIcon = {
@@ -170,7 +170,7 @@ fun CreateApplicant() {
                 icon = Icons.Default.Person,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .clip(fieldShape)
                     .then(fieldModifier)
             )
@@ -188,7 +188,7 @@ fun CreateApplicant() {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .height(120.dp),
                 shape = fieldShape,
                 minLines = 4
@@ -203,7 +203,7 @@ fun CreateApplicant() {
                 icon = Icons.Default.LocationOn,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .clip(fieldShape)
                     .then(fieldModifier)
             )
@@ -217,7 +217,7 @@ fun CreateApplicant() {
                 icon = Icons.Default.Star,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 16.dp)
                     .clip(fieldShape)
                     .then(fieldModifier)
             )
@@ -227,7 +227,7 @@ fun CreateApplicant() {
                 onClick = { /* Search action to be implemented */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(bottom = 32.dp),
                 shape = fieldShape
             ) {
                 Text(stringResource(R.string.submit))
