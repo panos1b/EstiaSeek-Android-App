@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,13 +49,12 @@ fun CreateApplicant() {
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
 
-    val jobTitles = listOf("Any", "Server", "Chef", "Bartender", "Receptionist")
-    val locations = listOf(
-        "Any", "Attica", "Macedonia and Thrace", "Epirus and Western Macedonia",
-        "Thessaly and Central Greece", "Peloponnese and Western Greece", "Aegean",
-        "Crete", "Monastic community of Mount Athos"
-    )
-    val experienceLevels = listOf("Any", "Entry Level", "Intermediate", "Senior")
+    val context = LocalContext.current
+
+    // Get the string arrays from resources
+    val jobTitles = context.resources.getStringArray(R.array.job_titles).toList()
+    val locations = context.resources.getStringArray(R.array.locations).toList()
+    val experienceLevels = context.resources.getStringArray(R.array.experience_levels).toList()
 
     val fieldShape = RoundedCornerShape(8.dp)
     val fieldModifier = Modifier.height(75.dp)
