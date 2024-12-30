@@ -38,9 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.estiaseek.ui.screens.CreateApplicantViewModel
+
 
 @Composable
-fun CreateApplicant() {
+fun CreateApplicant(viewModel: CreateApplicantViewModel) {
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -224,7 +227,16 @@ fun CreateApplicant() {
 
             // Submit Button
             Button(
-                onClick = { /* Search action to be implemented */ },
+                onClick = {
+                    viewModel.saveApplicant(
+                        name = name,
+                        surname = surname,
+                        email = email,
+                        bio = bio,
+                        jobTitle = selectedJobTitle,
+                        location = selectedLocation,
+                        experience = selectedExperience)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),
