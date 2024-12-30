@@ -1,3 +1,53 @@
 <resources>
     <string name="app_name">EstiaSeek</string>
+    
+    <!-- Create Applicants Strings -->
+    <string name="name">First Name</string>
+    <string name="surname">Last Name</string>
+    <string name="email">Email</string>
+    <string name="bio">Short Bio</string>
+    <string name="create_applicant">Show You\'re Available!</string>
+    <string name="submit">Submit</string>
+
+    <!-- Search Candidates Strings -->
+    <string name="results">Results</string>
+    <string name="results_based_on_search_terms">Results based on your search terms</string>
+    <string name="search_candidates">Search Candidates</string>
+    <string name="search">Search</string>
+    <string name="search_message">Find the perfect candidate for your position!</string>
+    
+    <!-- Common Strings -->
+    <string name="job_title">Job Title</string>
+    <string name="location">Location</string>
+    <string name="experience_level">Experience Level</string>
+    
+    <!-- Job Titles -->
+    <string-array name="job_titles">
+        <item>Any</item>
+        <item>Server</item>
+        <item>Chef</item>
+        <item>Bartender</item>
+        <item>Receptionist</item>
+    </string-array>
+
+    <!-- Locations -->
+    <string-array name="locations">
+        <item>Any</item>
+        <item>Attica</item>
+        <item>Macedonia and Thrace</item>
+        <item>Epirus and Western Macedonia</item>
+        <item>Thessaly and Central Greece</item>
+        <item>Peloponnese and Western Greece</item>
+        <item>Aegean</item>
+        <item>Crete</item>
+        <item>Monastic community of Mount Athos</item>
+    </string-array>
+
+    <!-- Experience Levels -->
+    <string-array name="experience_levels">
+        <item>Any</item>
+        <item>Entry Level</item>
+        <item>Intermediate</item>
+        <item>Senior</item>
+    </string-array>
 </resources>
