@@ -1,3 +1,5 @@
+package com.example.estiaseek.ui.profile
+
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.OptIn
@@ -81,10 +83,10 @@ fun Profile() {
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Profile Picture Overlay
+            // com.example.estiaseek.ui.profile.Profile Picture Overlay
             Image(
                 painter = rememberAsyncImagePainter("file:///android_asset/lilpop.jpg"), // Load from assets
-                contentDescription = "Profile Picture",
+                contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.BottomStart)

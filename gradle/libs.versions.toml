@@ -11,6 +11,7 @@ composeBom = "2023.08.00"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 navigationCompose = "2.8.5"
+ksp = "1.9.21-1.0.15"
 
 
 [libraries]
