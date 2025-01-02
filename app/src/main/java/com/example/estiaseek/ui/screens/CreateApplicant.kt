@@ -274,7 +274,6 @@ fun CreateApplicant(viewModel: CreateApplicantViewModel) {
                 onClick = {
                     errorMessages = viewModel.validateApplicant(
                         name = name,
-                        surname = surname,
                         email = email,
                         bio = bio,
                         jobTitle = selectedJobTitle,
