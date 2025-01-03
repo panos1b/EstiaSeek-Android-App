@@ -1,3 +1,5 @@
+package com.example.estiaseek.ui.profile
+
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.OptIn
