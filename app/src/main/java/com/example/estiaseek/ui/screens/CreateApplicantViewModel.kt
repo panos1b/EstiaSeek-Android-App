@@ -51,13 +51,10 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         location: String,
         experience: String
     ) {
-        // Generate a random password for now since it's not in the UI yet
-        val randomPassword = UUID.randomUUID().toString()
 
         val user = User(
             name = name,
             email = email,
-            password = randomPassword,
             bio = bio,
             experience = experience,
             location = location,
