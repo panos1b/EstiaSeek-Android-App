@@ -18,16 +18,23 @@ import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.estiaseek.ui.viewmodels.SearchUiState
+import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 @Composable
-fun CandidateSearchScreen() {
-    var selectedJobTitle by remember { mutableStateOf("") }
-    var selectedLocation by remember { mutableStateOf("") }
-    var selectedExperience by remember { mutableStateOf("") }
+fun CandidateSearchScreen(
+    onSearchButtonClicked: (SearchUiState) -> Unit,
+    searchViewModel : SearchViewModel
+) {
+
+    val searchUiState by searchViewModel.searchUIState.collectAsState()
 
     val context = LocalContext.current
 
@@ -97,8 +104,14 @@ fun CandidateSearchScreen() {
                     DropdownMenuField(
                         label = R.string.job_title,
                         options = jobTitles,
-                        selectedOption = selectedJobTitle,
-                        onOptionSelected = { selectedJobTitle = it },
+                        selectedOption = searchUiState.selectedJobTitle,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedJobTitle = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.Person,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -106,8 +119,14 @@ fun CandidateSearchScreen() {
                     DropdownMenuField(
                         label = R.string.location,
                         options = locations,
-                        selectedOption = selectedLocation,
-                        onOptionSelected = { selectedLocation = it },
+                        selectedOption = searchUiState.selectedLocation,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedLocation = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.LocationOn,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -115,8 +134,14 @@ fun CandidateSearchScreen() {
                     DropdownMenuField(
                         label = R.string.experience_level,
                         options = experienceLevels,
-                        selectedOption = selectedExperience,
-                        onOptionSelected = { selectedExperience = it },
+                        selectedOption = searchUiState.selectedExperience,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedExperience = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.Star,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -125,7 +150,10 @@ fun CandidateSearchScreen() {
 
             // Search Button
             Button(
-                onClick = { /* Search action to be implemented */ },
+                onClick = {
+                    onSearchButtonClicked(searchUiState);
+                    /* TODO Search action to be implemented */
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

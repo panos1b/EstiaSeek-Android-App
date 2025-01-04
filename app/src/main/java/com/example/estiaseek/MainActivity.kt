@@ -32,12 +32,5 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    // Toggle between screens dynamically
-    val showApplicantScreen = remember { mutableStateOf(true) }
-
-    if (showApplicantScreen.value) {
-        CreateApplicant()
-    } else {
-        CandidateSearchScreen()
-    }
+    EstiaSeekScreen()
 }

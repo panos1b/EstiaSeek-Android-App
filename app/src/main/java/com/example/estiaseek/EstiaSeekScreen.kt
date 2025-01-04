@@ -3,8 +3,11 @@ package com.example.estiaseek
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,35 +16,59 @@ import com.example.estiaseek.ui.screens.CreateApplicant
 import com.example.estiaseek.ui.screens.HomeScreen
 import com.example.estiaseek.ui.profile.Profile
 import com.example.estiaseek.ResultsScreen
+import com.example.estiaseek.ui.screens.CandidateSearchScreen
+import com.example.estiaseek.ui.viewmodels.ProfileViewModel
+import com.example.estiaseek.ui.viewmodels.SearchUiState
+import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 
 enum class EstiaSeekScreen() {
     Start,
     CreateApplicant,
     ShowResults,
-    Profile
+    Profile,
+    Search
 }
 
 @Composable
 fun EstiaSeekScreen(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    searchViewModel: SearchViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel()
 ) {
     NavHost(
         navController = navController,
         startDestination = EstiaSeekScreen.Start.name,
-        modifier = Modifier
+        modifier = Modifier,
     ) {
         composable(route = EstiaSeekScreen.Start.name) {
-            HomeScreen()
+            HomeScreen(
+                onSearchButtonClicked = { navController.navigate(EstiaSeekScreen.Search.name) },
+                onCreateApplicantButtonClicked = { navController.navigate(EstiaSeekScreen.CreateApplicant.name) }
+            )
         }
         composable(route = EstiaSeekScreen.CreateApplicant.name) {
-            CreateApplicant()
+            CreateApplicant(
+                onCreateApplicantButtonClicked = { navController.navigate(EstiaSeekScreen.Start.name)}
+            )
         }
         composable(route = EstiaSeekScreen.ShowResults.name) {
-            ResultsScreen()
+            ResultsScreen(
+                onProfileClicked = { navController.navigate(EstiaSeekScreen.Profile.name)},
+                searchViewModel = searchViewModel,
+                profileViewModel = profileViewModel
+            )
         }
         composable(route = EstiaSeekScreen.Profile.name) {
-            Profile()
+            Profile(
+                profileViewModel = profileViewModel
+            )
+        }
+        composable(route = EstiaSeekScreen.Search.name) {
+            CandidateSearchScreen(
+                onSearchButtonClicked = { navController.navigate(EstiaSeekScreen.ShowResults.name)},
+                searchViewModel = searchViewModel
+                )
         }
     }
 

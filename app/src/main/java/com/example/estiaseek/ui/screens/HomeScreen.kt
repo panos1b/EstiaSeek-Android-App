@@ -19,7 +19,10 @@ import com.example.estiaseek.R
 import com.example.estiaseek.ui.theme.EstiaSeekTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onSearchButtonClicked: () -> Unit,
+    onCreateApplicantButtonClicked: () -> Unit,
+) {
     EstiaSeekTheme { // Ensure the app's theme is applied
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -59,7 +62,9 @@ fun HomeScreen() {
 
                     // First Button
                     Button(
-                        onClick = { /* TODO: Add action */ },
+                        onClick = {
+                            onSearchButtonClicked()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp)
@@ -71,7 +76,9 @@ fun HomeScreen() {
 
                     // Second Button
                     Button(
-                        onClick = { /* TODO: Add action */ },
+                        onClick = {
+                            onCreateApplicantButtonClicked()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp)
@@ -87,5 +94,8 @@ fun HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        onSearchButtonClicked = {},
+        onCreateApplicantButtonClicked = {}
+    )
 }

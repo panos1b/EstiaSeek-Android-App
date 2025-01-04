@@ -38,9 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import kotlin.Unit
 
 @Composable
-fun CreateApplicant() {
+fun CreateApplicant(
+    onCreateApplicantButtonClicked: () -> Unit,
+) {
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -224,7 +227,8 @@ fun CreateApplicant() {
 
             // Submit Button
             Button(
-                onClick = { /* Search action to be implemented */ },
+                onClick = { onCreateApplicantButtonClicked()
+                /* TODO create applicant!*/ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),

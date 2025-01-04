@@ -30,12 +30,17 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import com.example.estiaseek.ui.viewmodels.ProfileViewModel
+import com.example.estiaseek.ui.viewmodels.SearchUiState
 
 
 @OptIn(UnstableApi::class)
 @Composable
-fun Profile() {
+fun Profile(
+    profileViewModel: ProfileViewModel
+) {
     val context = LocalContext.current
+    val profileViewState by profileViewModel.profileViewState.collectAsState()
 
     // Remember ExoPlayer instance
     val exoPlayer = remember {
@@ -105,7 +110,7 @@ fun Profile() {
         ) {
             // User Name
             Text(
-                text = "Lil Pop",
+                text = "Lil Pop - ${profileViewState.username}",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -198,5 +203,7 @@ fun Profile() {
 @Preview
 @Composable
 fun PreviewProfile() {
-    Profile()
+    Profile(
+        profileViewModel = ProfileViewModel()
+    )
 }
