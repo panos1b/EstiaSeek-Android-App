@@ -3,7 +3,6 @@ package com.example.estiaseek.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,14 +38,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.estiaseek.ui.screens.CreateApplicantViewModel
 
 
 @Composable
 fun CreateApplicant(viewModel: CreateApplicantViewModel) {
     var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var bio by remember { mutableStateOf("") }
     var selectedJobTitle by remember { mutableStateOf("") }

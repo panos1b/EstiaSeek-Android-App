@@ -2,10 +2,9 @@ package com.example.estiaseek.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.estiaseek.data.UsersRepository
 import com.example.estiaseek.data.User
+import com.example.estiaseek.data.UsersRepository
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class CreateApplicantViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
