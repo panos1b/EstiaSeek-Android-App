@@ -40,10 +40,10 @@ import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 
 @Composable
-fun CandidateSearchScreen() {
-    var selectedJobTitle by remember { mutableStateOf("") }
-    var selectedLocation by remember { mutableStateOf("") }
-    var selectedExperience by remember { mutableStateOf("") }
+fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
+    var selectedJobTitle by remember { mutableStateOf("Any") }
+    var selectedLocation by remember { mutableStateOf("Any") }
+    var selectedExperience by remember { mutableStateOf("Any") }
 
     val context = LocalContext.current
 
@@ -141,7 +141,9 @@ fun CandidateSearchScreen() {
 
             // Search Button
             Button(
-                onClick = { /* Search action to be implemented */ },
+                onClick = {
+                    viewModel.searchCandidates(selectedJobTitle, selectedLocation, selectedExperience)
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
