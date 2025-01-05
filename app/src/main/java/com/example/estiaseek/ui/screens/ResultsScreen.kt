@@ -1,4 +1,4 @@
-package com.example.estiaseek
+package com.example.estiaseek.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.components.ImageCard
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
@@ -79,7 +80,7 @@ fun ResultsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
         ) {
-            Text(text = "Search Candidate")
+            Text(text = "GO TO PROFILE DEMO BUTTON")
         }
         Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
             Row(

@@ -9,8 +9,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.estiaseek.ui.profile.Profile
 import com.example.estiaseek.ui.screens.CandidateSearchScreen
+import com.example.estiaseek.ui.screens.CandidateSearchViewModel
 import com.example.estiaseek.ui.screens.CreateApplicant
+import com.example.estiaseek.ui.screens.CreateApplicantViewModel
 import com.example.estiaseek.ui.screens.HomeScreen
+import com.example.estiaseek.ui.screens.ResultsScreen
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
@@ -27,7 +30,9 @@ enum class EstiaSeekScreen() {
 fun EstiaSeekScreen(
     navController: NavHostController = rememberNavController(),
     searchViewModel: SearchViewModel = viewModel(),
-    profileViewModel: ProfileViewModel = viewModel()
+    profileViewModel: ProfileViewModel = viewModel(),
+    viewModel : CandidateSearchViewModel,
+    createApplicantViewModel : CreateApplicantViewModel
 ) {
     NavHost(
         navController = navController,
@@ -42,7 +47,8 @@ fun EstiaSeekScreen(
         }
         composable(route = EstiaSeekScreen.CreateApplicant.name) {
             CreateApplicant(
-                onCreateApplicantButtonClicked = { navController.navigate(EstiaSeekScreen.Start.name)}
+                onCreateApplicantButtonClicked = { navController.navigate(EstiaSeekScreen.Start.name)},
+                 viewModel = createApplicantViewModel //fixme
             )
         }
         composable(route = EstiaSeekScreen.ShowResults.name) {
@@ -60,7 +66,8 @@ fun EstiaSeekScreen(
         composable(route = EstiaSeekScreen.Search.name) {
             CandidateSearchScreen(
                 onSearchButtonClicked = { navController.navigate(EstiaSeekScreen.ShowResults.name)},
-                searchViewModel = searchViewModel
+                searchViewModel = searchViewModel,
+                viewModel = viewModel
                 )
         }
     }

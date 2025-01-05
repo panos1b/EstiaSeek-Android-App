@@ -3,7 +3,6 @@ package com.example.estiaseek.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,17 +40,21 @@ import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 import kotlin.Unit
 
+
 @Composable
 fun CreateApplicant(
     onCreateApplicantButtonClicked: () -> Unit,
+    viewModel: CreateApplicantViewModel
 ) {
     var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var bio by remember { mutableStateOf("") }
     var selectedJobTitle by remember { mutableStateOf("") }
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
+
+    // Error messages
+    var errorMessages by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
 
     val context = LocalContext.current
 
@@ -61,6 +65,16 @@ fun CreateApplicant(
 
     val fieldShape = RoundedCornerShape(8.dp)
     val fieldModifier = Modifier.height(75.dp)
+
+    // Mapping error keys to resource strings
+    val errorMessagesMap = mapOf(
+        "name_required" to context.getString(R.string.name_required),
+        "email_required" to context.getString(R.string.email_required),
+        "job_title_required" to context.getString(R.string.job_title_required),
+        "bio_required" to context.getString(R.string.bio_required),
+        "location_required" to context.getString(R.string.location_required),
+        "experience_required" to context.getString(R.string.experience_required)
+    )
 
     // Ensure the content is scrollable
     Box(
@@ -82,13 +96,8 @@ fun CreateApplicant(
                     .align(Alignment.CenterHorizontally)
             )
 
-            // Row for Name and Surname
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            // Name Field with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
@@ -101,7 +110,7 @@ fun CreateApplicant(
                     },
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left),
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .then(fieldModifier),
                     shape = fieldShape,
                     leadingIcon = {
@@ -112,123 +121,177 @@ fun CreateApplicant(
                     },
                     singleLine = true
                 )
+                // Show error message for name if present
+                errorMessages["name"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
 
+            // Email Field with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
-                    value = surname,
-                    onValueChange = { surname = it },
+                    value = email,
+                    onValueChange = { email = it },
                     label = {
                         Text(
-                            text = stringResource(R.string.surname),
+                            text = stringResource(R.string.email),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Left
                         )
                     },
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left),
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .then(fieldModifier),
                     shape = fieldShape,
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Person,
+                            imageVector = Icons.Default.Email,
                             contentDescription = null
                         )
                     },
                     singleLine = true
                 )
+                // Show error message for email if present
+                errorMessages["email"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
 
-            // Email Field
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = {
+            // Job Title Dropdown with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
+                DropdownMenuField(
+                    label = R.string.job_title,
+                    options = jobTitles,
+                    selectedOption = selectedJobTitle,
+                    onOptionSelected = { selectedJobTitle = it },
+                    icon = Icons.Default.Person,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(fieldShape)
+                        .then(fieldModifier)
+                )
+                // Show error message for job title if present
+                errorMessages["jobTitle"]?.let {
                     Text(
-                        text = stringResource(R.string.email),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Left
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
-                },
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .then(fieldModifier),
-                shape = fieldShape,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = null
+                }
+            }
+
+            // Bio Field with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = bio,
+                    onValueChange = { bio = it },
+                    label = { Text(stringResource(R.string.bio)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    shape = fieldShape,
+                    minLines = 4
+                )
+                // Show error message for bio if present
+                errorMessages["bio"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
-                },
-                singleLine = true
-            )
+                }
+            }
 
-            // Job Title Dropdown
-            DropdownMenuField(
-                label = R.string.job_title,
-                options = jobTitles,
-                selectedOption = selectedJobTitle,
-                onOptionSelected = { selectedJobTitle = it },
-                icon = Icons.Default.Person,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .clip(fieldShape)
-                    .then(fieldModifier)
-            )
-
-            // Bio Field
-            OutlinedTextField(
-                value = bio,
-                onValueChange = { bio = it },
-                label = { Text(stringResource(R.string.bio)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null
+            // Location Dropdown with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
+                DropdownMenuField(
+                    label = R.string.location,
+                    options = locations,
+                    selectedOption = selectedLocation,
+                    onOptionSelected = { selectedLocation = it },
+                    icon = Icons.Default.LocationOn,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(fieldShape)
+                        .then(fieldModifier)
+                )
+                // Show error message for location if present
+                errorMessages["location"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .height(120.dp),
-                shape = fieldShape,
-                minLines = 4
-            )
+                }
+            }
 
-            // Location Dropdown
-            DropdownMenuField(
-                label = R.string.location,
-                options = locations,
-                selectedOption = selectedLocation,
-                onOptionSelected = { selectedLocation = it },
-                icon = Icons.Default.LocationOn,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .clip(fieldShape)
-                    .then(fieldModifier)
-            )
-
-            // Experience Dropdown
-            DropdownMenuField(
-                label = R.string.experience_level,
-                options = experienceLevels,
-                selectedOption = selectedExperience,
-                onOptionSelected = { selectedExperience = it },
-                icon = Icons.Default.Star,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .clip(fieldShape)
-                    .then(fieldModifier)
-            )
+            // Experience Dropdown with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
+                DropdownMenuField(
+                    label = R.string.experience_level,
+                    options = experienceLevels,
+                    selectedOption = selectedExperience,
+                    onOptionSelected = { selectedExperience = it },
+                    icon = Icons.Default.Star,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(fieldShape)
+                        .then(fieldModifier)
+                )
+                // Show error message for experience if present
+                errorMessages["experience"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
 
             // Submit Button
             Button(
-                onClick = { onCreateApplicantButtonClicked()
-                /* TODO create applicant!*/ },
+                onClick = {
+                    errorMessages = viewModel.validateApplicant(
+                        name = name,
+                        email = email,
+                        bio = bio,
+                        jobTitle = selectedJobTitle,
+                        location = selectedLocation,
+                        experience = selectedExperience
+                    )
+                    if (errorMessages.isEmpty()) {
+                        viewModel.saveApplicant(
+                            name = name,
+                            email = email,
+                            bio = bio,
+                            jobTitle = selectedJobTitle,
+                            location = selectedLocation,
+                            experience = selectedExperience
+                        )
+                        onCreateApplicantButtonClicked()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),

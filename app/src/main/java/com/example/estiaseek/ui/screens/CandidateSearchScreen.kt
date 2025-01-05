@@ -23,12 +23,22 @@ import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 import com.example.estiaseek.ui.viewmodels.SearchUiState
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+
 
 @Composable
 fun CandidateSearchScreen(
     onSearchButtonClicked: (SearchUiState) -> Unit,
-    searchViewModel : SearchViewModel
-) {
+    searchViewModel : SearchViewModel,
+    viewModel: CandidateSearchViewModel
+    ) {
 
     val searchUiState by searchViewModel.searchUIState.collectAsState()
 
@@ -149,7 +159,11 @@ fun CandidateSearchScreen(
                 onClick = {
                     onSearchButtonClicked(searchUiState)
                     /* TODO Search action to be implemented */
-                },
+                    viewModel.searchCandidates(
+                        searchUiState.selectedJobTitle,
+                        searchUiState.selectedLocation,
+                        searchUiState.selectedExperience)
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
