@@ -1,24 +1,17 @@
 package com.example.estiaseek
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.estiaseek.ui.profile.Profile
+import com.example.estiaseek.ui.screens.CandidateSearchScreen
 import com.example.estiaseek.ui.screens.CreateApplicant
 import com.example.estiaseek.ui.screens.HomeScreen
-import com.example.estiaseek.ui.profile.Profile
-import com.example.estiaseek.ResultsScreen
-import com.example.estiaseek.ui.screens.CandidateSearchScreen
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
-import com.example.estiaseek.ui.viewmodels.SearchUiState
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 

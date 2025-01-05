@@ -36,15 +36,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.components.ImageCard
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
-import com.example.estiaseek.ui.viewmodels.SearchUiState
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
