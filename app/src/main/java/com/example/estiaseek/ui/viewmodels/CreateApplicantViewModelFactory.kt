@@ -1,4 +1,4 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

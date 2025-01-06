@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import com.example.estiaseek.data.EstiaSeekDatabase
 import com.example.estiaseek.data.OfflineUsersRepository
-import com.example.estiaseek.ui.screens.CandidateSearchScreen
-import com.example.estiaseek.ui.screens.CandidateSearchViewModel
-import com.example.estiaseek.ui.screens.CandidateSearchViewModelFactory
-import com.example.estiaseek.ui.screens.CreateApplicantViewModel
+import com.example.estiaseek.ui.navigation.NavigationHelper
+import com.example.estiaseek.ui.viewmodels.CandidateSearchViewModel
+import com.example.estiaseek.ui.viewmodels.CandidateSearchViewModelFactory
+import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
 import com.example.estiaseek.ui.theme.EstiaSeekTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    EstiaSeekScreen(
+                    NavigationHelper(
                         viewModel = candidateSearchViewModel,
                         createApplicantViewModel = createApplicantViewModel
                     )

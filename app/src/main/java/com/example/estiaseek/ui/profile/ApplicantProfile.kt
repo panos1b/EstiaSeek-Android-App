@@ -35,7 +35,7 @@ import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 
 @OptIn(UnstableApi::class)
 @Composable
-fun Profile(
+fun ApplicantProfile(
     profileViewModel: ProfileViewModel
 ) {
     val context = LocalContext.current
@@ -44,7 +44,7 @@ fun Profile(
     // Remember ExoPlayer instance
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/test.mp4")))
+            setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/videos/test.mp4")))
             prepare()
             playWhenReady = true
             volume = 0f // Mute by default
@@ -89,7 +89,7 @@ fun Profile(
 
             // com.example.estiaseek.ui.profile.Profile Picture Overlay
             Image(
-                painter = rememberAsyncImagePainter("file:///android_asset/lilpop.jpg"), // Load from assets
+                painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"), // Load from assets
                 contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -201,8 +201,8 @@ fun Profile(
 
 @Preview
 @Composable
-fun PreviewProfile() {
-    Profile(
+fun PreviewApplicantProfile() {
+    ApplicantProfile(
         profileViewModel = ProfileViewModel()
     )
 }
