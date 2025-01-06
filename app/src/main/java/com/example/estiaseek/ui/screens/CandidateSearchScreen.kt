@@ -1,15 +1,7 @@
 package com.example.estiaseek.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,17 +10,8 @@ import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -38,12 +21,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import com.example.estiaseek.ui.viewmodels.SearchUiState
+import com.example.estiaseek.ui.viewmodels.SearchViewModel
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+
 
 @Composable
-fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
-    var selectedJobTitle by remember { mutableStateOf("Any") }
-    var selectedLocation by remember { mutableStateOf("Any") }
-    var selectedExperience by remember { mutableStateOf("Any") }
+fun CandidateSearchScreen(
+    onSearchButtonClicked: (SearchUiState) -> Unit,
+    searchViewModel : SearchViewModel,
+    viewModel: CandidateSearchViewModel
+    ) {
+
+    val searchUiState by searchViewModel.searchUIState.collectAsState()
 
     val context = LocalContext.current
 
@@ -113,8 +110,14 @@ fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
                     DropdownMenuField(
                         label = R.string.job_title,
                         options = jobTitles,
-                        selectedOption = selectedJobTitle,
-                        onOptionSelected = { selectedJobTitle = it },
+                        selectedOption = searchUiState.selectedJobTitle,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedJobTitle = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.Person,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -122,8 +125,14 @@ fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
                     DropdownMenuField(
                         label = R.string.location,
                         options = locations,
-                        selectedOption = selectedLocation,
-                        onOptionSelected = { selectedLocation = it },
+                        selectedOption = searchUiState.selectedLocation,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedLocation = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.LocationOn,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -131,8 +140,14 @@ fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
                     DropdownMenuField(
                         label = R.string.experience_level,
                         options = experienceLevels,
-                        selectedOption = selectedExperience,
-                        onOptionSelected = { selectedExperience = it },
+                        selectedOption = searchUiState.selectedExperience,
+                        onOptionSelected = {
+                            searchViewModel.updateSearchState(
+                                newState = searchUiState.copy(
+                                    selectedExperience = it
+                                )
+                            )
+                        },
                         icon = Icons.Rounded.Star,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -142,7 +157,11 @@ fun CandidateSearchScreen(viewModel: CandidateSearchViewModel) {
             // Search Button
             Button(
                 onClick = {
-                    viewModel.searchCandidates(selectedJobTitle, selectedLocation, selectedExperience)
+                    onSearchButtonClicked(searchUiState)
+                    viewModel.searchCandidates(
+                        searchUiState.selectedJobTitle,
+                        searchUiState.selectedLocation,
+                        searchUiState.selectedExperience)
                           },
                 modifier = Modifier
                     .fillMaxWidth()

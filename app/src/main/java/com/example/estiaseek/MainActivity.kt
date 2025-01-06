@@ -13,6 +13,7 @@ import com.example.estiaseek.data.OfflineUsersRepository
 import com.example.estiaseek.ui.screens.CandidateSearchScreen
 import com.example.estiaseek.ui.screens.CandidateSearchViewModel
 import com.example.estiaseek.ui.screens.CandidateSearchViewModelFactory
+import com.example.estiaseek.ui.screens.CreateApplicantViewModel
 import com.example.estiaseek.ui.theme.EstiaSeekTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +26,10 @@ class MainActivity : ComponentActivity() {
 
         // Create the ViewModel using the factory
         val factory = CandidateSearchViewModelFactory(usersRepository)
-        val viewModel: CandidateSearchViewModel = ViewModelProvider(this, factory).get(CandidateSearchViewModel::class.java)
+        val candidateSearchViewModel: CandidateSearchViewModel = ViewModelProvider(this, factory).get(CandidateSearchViewModel::class.java)
+
+        //FIXME
+        val createApplicantViewModel : CreateApplicantViewModel = CreateApplicantViewModel(usersRepository=usersRepository)
 
         setContent {
             EstiaSeekTheme {
@@ -33,7 +37,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CandidateSearchScreen(viewModel = viewModel)
+                    EstiaSeekScreen(
+                        viewModel = candidateSearchViewModel,
+                        createApplicantViewModel = createApplicantViewModel
+                    )
                 }
             }
         }

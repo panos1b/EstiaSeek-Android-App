@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,11 +42,21 @@ import androidx.navigation.compose.rememberNavController
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.components.ImageCard
+import com.example.estiaseek.ui.viewmodels.ProfileViewModel
+import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = false)
 @Composable
-fun ResultsScreen() {
+fun ResultsScreen(
+    searchViewModel : SearchViewModel,
+    profileViewModel: ProfileViewModel,
+    onProfileClicked: () -> Unit,
+) {
+    val profileViewState by profileViewModel.profileViewState.collectAsState()
+
+    val searchUiState by searchViewModel.searchUIState.collectAsState()
+
+    //TODO we cant have a full fat nav controller here
     val navController = rememberNavController()
 
     Scaffold(
@@ -53,7 +65,23 @@ fun ResultsScreen() {
         }
     )
     { paddingValues ->
-
+        // TODO Clicking on profile should envoke onProfileClicked and updaye state with username
+        // FIXME TEST BUTTON REMOVE WHEN FIXED
+        Button(
+            onClick = {
+                profileViewModel.updateProfileView(
+                    newState = profileViewState.copy(
+                        username = "panos1b"
+                    )
+                )
+                onProfileClicked()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+        ) {
+            Text(text = "GO TO PROFILE DEMO BUTTON")
+        }
         Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
             Row(
                 modifier = Modifier
@@ -175,7 +203,11 @@ fun ResultsScreen() {
 @Composable
 @Preview(showBackground = false)
 fun PreviewResults() {
-    ResultsScreen()
+    ResultsScreen(
+        searchViewModel = SearchViewModel(),
+        profileViewModel = ProfileViewModel(),
+        onProfileClicked = {}
+    )
 }
 
 @Composable

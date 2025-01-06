@@ -38,10 +38,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import kotlin.Unit
 
 
 @Composable
-fun CreateApplicant(viewModel: CreateApplicantViewModel) {
+fun CreateApplicant(
+    onCreateApplicantButtonClicked: () -> Unit,
+    viewModel: CreateApplicantViewModel
+) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var bio by remember { mutableStateOf("") }
@@ -285,6 +289,7 @@ fun CreateApplicant(viewModel: CreateApplicantViewModel) {
                             location = selectedLocation,
                             experience = selectedExperience
                         )
+                        onCreateApplicantButtonClicked()
                     }
                 },
                 modifier = Modifier
