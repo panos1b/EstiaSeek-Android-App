@@ -158,7 +158,6 @@ fun CandidateSearchScreen(
             Button(
                 onClick = {
                     onSearchButtonClicked(searchUiState)
-                    /* TODO Search action to be implemented */
                     viewModel.searchCandidates(
                         searchUiState.selectedJobTitle,
                         searchUiState.selectedLocation,

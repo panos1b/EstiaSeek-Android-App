@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 data class SearchUiState(
-    val selectedJobTitle: String = "",
-    val selectedLocation: String = "",
-    val selectedExperience: String = "",
+    val selectedJobTitle: String = "Any",
+    val selectedLocation: String = "Any",
+    val selectedExperience: String = "Any",
 )
 
 class SearchViewModel : ViewModel() {
