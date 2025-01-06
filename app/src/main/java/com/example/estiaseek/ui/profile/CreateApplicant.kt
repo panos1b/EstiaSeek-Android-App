@@ -1,4 +1,4 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
+import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
 import kotlin.Unit
 
 

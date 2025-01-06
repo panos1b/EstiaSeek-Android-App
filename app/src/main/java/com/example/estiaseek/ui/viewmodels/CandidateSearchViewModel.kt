@@ -1,6 +1,5 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.estiaseek.data.User

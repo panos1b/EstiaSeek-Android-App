@@ -1,4 +1,4 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

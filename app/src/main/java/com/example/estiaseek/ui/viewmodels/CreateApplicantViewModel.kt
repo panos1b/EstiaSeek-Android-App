@@ -1,5 +1,6 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui.viewmodels
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.estiaseek.data.User
@@ -22,7 +23,7 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         if (name.isBlank()) {
             errors["name"] = "name_required"
         }
-        if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errors["email"] = "email_required"
         }
         if (jobTitle.isBlank()) {

@@ -35,7 +35,7 @@ import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 
 @OptIn(UnstableApi::class)
 @Composable
-fun Profile(
+fun ApplicantProfile(
     profileViewModel: ProfileViewModel
 ) {
     val context = LocalContext.current
@@ -201,8 +201,8 @@ fun Profile(
 
 @Preview
 @Composable
-fun PreviewProfile() {
-    Profile(
+fun PreviewApplicantProfile() {
+    ApplicantProfile(
         profileViewModel = ProfileViewModel()
     )
 }

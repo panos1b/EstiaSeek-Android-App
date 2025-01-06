@@ -1,4 +1,4 @@
-package com.example.estiaseek.ui.screens
+package com.example.estiaseek.ui.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,7 +10,6 @@ import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import com.example.estiaseek.ui.viewmodels.CandidateSearchViewModel
 
 
 @Composable
