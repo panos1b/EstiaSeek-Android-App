@@ -38,10 +38,11 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(10.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Spacer(modifier = Modifier.height(16.dp))
                     // Heading
                     Text(
                         text = "Welcome to EstiaSeek",
@@ -56,7 +57,7 @@ fun HomeScreen(
                         painter = painterResource(id = R.drawable.emp),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .size(150.dp)
+                            .size(300.dp)
                             .padding(bottom = 24.dp)
                     )
 
@@ -69,7 +70,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp)
                     ) {
-                        Text(text = "Search Candidate")
+                        Text(text = "Search for Candidates")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -83,7 +84,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp)
                     ) {
-                        Text(text = "Create Applicant")
+                        Text(text = "Create Candidates")
                     }
                 }
             }
