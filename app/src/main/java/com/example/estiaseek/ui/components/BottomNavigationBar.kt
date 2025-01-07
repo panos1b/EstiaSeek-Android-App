@@ -13,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.estiaseek.R
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(
+    onSearchIconButtonClicked: () -> Unit,
+    onStartIconButtonClicked: () -> Unit
+) {
     BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +31,9 @@ fun BottomNavigationBar(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             IconButton(
-                onClick = { navController.navigate("search_screen") }
+                onClick = {
+                    onSearchIconButtonClicked()
+                }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.search_interface_symbol),
@@ -38,11 +42,13 @@ fun BottomNavigationBar(navController: NavController) {
                 )
             }
             IconButton(
-                onClick = { navController.navigate("search_screen") }
+                onClick = {
+                    onStartIconButtonClicked()
+                }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.listing),
-                    contentDescription = "Listings",
+                    painter = painterResource(id = R.drawable.home),
+                    contentDescription = "Home",
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
