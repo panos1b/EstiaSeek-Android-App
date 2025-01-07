@@ -44,7 +44,7 @@ fun NavigationHelper(
         composable(route = NavigationHelper.Start.name) {
             HomeScreen(
                 onSearchButtonClicked = { navController.navigate(NavigationHelper.Search.name) },
-                onCreateApplicantButtonClicked = { navController.navigate(NavigationHelper.CreateApplicant.name) },
+                onCreateApplicantButtonClicked = { navController.navigate(NavigationHelper.CreateApplicant.name) }
             )
         }
         composable(route = NavigationHelper.CreateApplicant.name) {
@@ -76,8 +76,8 @@ fun NavigationHelper(
         }
         composable(route = NavigationHelper.BottomNavBar.name) {
             BottomNavigationBar(
-                onSearchIconButtonClicked = { navController.navigate(NavigationHelper.Search.name)},
-                onStartIconButtonClicked = { navController.navigate(NavigationHelper.Start.name)}
+                onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name)},
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name)}
             )
         }
     }

@@ -66,11 +66,13 @@ fun ResultsScreen(
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
-                onSearchIconButtonClicked = { navController.navigate(NavigationHelper.Search.name) },
-                onStartIconButtonClicked = { navController.navigate(NavigationHelper.Start.name) }
+                onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) }
             )
         }
     ) { paddingValues ->
+        // TODO Clicking on profile should envoke onProfileClicked and updaye state with username
+        // FIXME TEST BUTTON REMOVE WHEN FIXED
         Button(
             onClick = {
                 profileViewModel.updateProfileView(

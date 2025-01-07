@@ -92,7 +92,7 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = false)
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(

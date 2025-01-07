@@ -17,8 +17,8 @@ import com.example.estiaseek.R
 
 @Composable
 fun BottomNavigationBar(
-    onSearchIconButtonClicked: () -> Unit,
-    onStartIconButtonClicked: () -> Unit
+    onSearchIconClicked: () -> Unit,
+    onStartIconClicked: () -> Unit
 ) {
     BottomAppBar(
         modifier = Modifier
@@ -32,7 +32,7 @@ fun BottomNavigationBar(
         ) {
             IconButton(
                 onClick = {
-                    onSearchIconButtonClicked()
+                    onSearchIconClicked()
                 }
             ) {
                 Image(
@@ -43,7 +43,7 @@ fun BottomNavigationBar(
             }
             IconButton(
                 onClick = {
-                    onStartIconButtonClicked()
+                    onStartIconClicked()
                 }
             ) {
                 Image(
