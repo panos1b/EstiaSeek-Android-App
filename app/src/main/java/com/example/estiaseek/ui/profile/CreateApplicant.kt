@@ -1,8 +1,12 @@
 package com.example.estiaseek.ui.profile
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,10 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
@@ -53,11 +59,17 @@ fun CreateApplicant(
     var selectedJobTitle by remember { mutableStateOf("") }
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // Error messages
     var errorMessages by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
 
     val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        selectedImageUri = uri
+    }
 
     // Get the string arrays from resources
     val jobTitles = context.resources.getStringArray(R.array.job_titles).toList()
@@ -74,7 +86,8 @@ fun CreateApplicant(
         "job_title_required" to context.getString(R.string.job_title_required),
         "bio_required" to context.getString(R.string.bio_required),
         "location_required" to context.getString(R.string.location_required),
-        "experience_required" to context.getString(R.string.experience_required)
+        "experience_required" to context.getString(R.string.experience_required),
+        "photo_required" to context.getString(R.string.photo_required)
     )
 
     // Ensure the content is scrollable
@@ -270,6 +283,56 @@ fun CreateApplicant(
                 }
             }
 
+            // Photo Upload Field
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { launcher.launch("image/*") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(75.dp),
+                    shape = fieldShape
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = selectedImageUri?.let {
+                                stringResource(R.string.change_photo)
+                            } ?: stringResource(R.string.upload_photo)
+                        )
+                    }
+                }
+
+                // Show selected image preview
+                selectedImageUri?.let { uri ->
+                    AsyncImage(
+                        model = uri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(top = 8.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // Show error message for photo if present
+                errorMessages["photo"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+
             // Submit Button
             Button(
                 onClick = {
@@ -279,7 +342,8 @@ fun CreateApplicant(
                         bio = bio,
                         jobTitle = selectedJobTitle,
                         location = selectedLocation,
-                        experience = selectedExperience
+                        experience = selectedExperience,
+                        photoUri = selectedImageUri
                     )
                     if (errorMessages.isEmpty()) {
                         viewModel.saveApplicant(
@@ -288,7 +352,8 @@ fun CreateApplicant(
                             bio = bio,
                             jobTitle = selectedJobTitle,
                             location = selectedLocation,
-                            experience = selectedExperience
+                            experience = selectedExperience,
+                            photoUri = selectedImageUri
                         )
                         onCreateApplicantButtonClicked()
                     }
