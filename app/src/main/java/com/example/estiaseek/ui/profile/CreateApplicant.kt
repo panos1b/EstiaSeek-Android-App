@@ -1,5 +1,6 @@
 package com.example.estiaseek.ui.profile
 
+
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
@@ -45,8 +47,8 @@ import coil.compose.AsyncImage
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
+import java.io.InputStream
 import kotlin.Unit
-
 
 @Composable
 fun CreateApplicant(
@@ -59,7 +61,8 @@ fun CreateApplicant(
     var selectedJobTitle by remember { mutableStateOf("") }
     var selectedLocation by remember { mutableStateOf("") }
     var selectedExperience by remember { mutableStateOf("") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var photoUri by remember { mutableStateOf<Uri?>(null) }
+    var photoData by remember { mutableStateOf<ByteArray?>(null) } // Updated to ByteArray
 
     // Error messages
     var errorMessages by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
@@ -68,7 +71,11 @@ fun CreateApplicant(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        selectedImageUri = uri
+        photoUri = uri
+        uri?.let {
+            val inputStream: InputStream? = context.contentResolver.openInputStream(it)
+            photoData = inputStream?.readBytes()
+        }
     }
 
     // Get the string arrays from resources
@@ -286,7 +293,7 @@ fun CreateApplicant(
             // Photo Upload Field
             Column(modifier = Modifier.fillMaxWidth()) {
                 Button(
-                    onClick = { launcher.launch("image/*") },
+                    onClick = { launcher.launch("image/png") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(75.dp),
@@ -297,11 +304,11 @@ fun CreateApplicant(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Edit,
+                            imageVector = Icons.Default.AddCircle,
                             contentDescription = null
                         )
                         Text(
-                            text = selectedImageUri?.let {
+                            text = photoUri?.let {
                                 stringResource(R.string.change_photo)
                             } ?: stringResource(R.string.upload_photo)
                         )
@@ -309,7 +316,7 @@ fun CreateApplicant(
                 }
 
                 // Show selected image preview
-                selectedImageUri?.let { uri ->
+                photoUri?.let { uri ->
                     AsyncImage(
                         model = uri,
                         contentDescription = null,
@@ -343,7 +350,7 @@ fun CreateApplicant(
                         jobTitle = selectedJobTitle,
                         location = selectedLocation,
                         experience = selectedExperience,
-                        photoUri = selectedImageUri
+                        photoData = photoData
                     )
                     if (errorMessages.isEmpty()) {
                         viewModel.saveApplicant(
@@ -353,7 +360,7 @@ fun CreateApplicant(
                             jobTitle = selectedJobTitle,
                             location = selectedLocation,
                             experience = selectedExperience,
-                            photoUri = selectedImageUri
+                            photoData = photoData
                         )
                         onCreateApplicantButtonClicked()
                     }
