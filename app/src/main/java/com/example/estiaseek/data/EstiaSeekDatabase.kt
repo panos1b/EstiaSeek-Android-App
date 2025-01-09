@@ -1,11 +1,27 @@
 package com.example.estiaseek.data
 
 import android.content.Context
+import android.net.Uri
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 
-@Database(entities = [User::class], version = 2, exportSchema = false)
+class Converters {
+    @TypeConverter
+    fun fromString(value: String?): Uri? {
+        return value?.let { Uri.parse(it) }
+    }
+
+    @TypeConverter
+    fun uriToString(uri: Uri?): String? {
+        return uri?.toString()
+    }
+}
+
+@Database(entities = [User::class], version = 3, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class EstiaSeekDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
@@ -14,7 +30,6 @@ abstract class EstiaSeekDatabase : RoomDatabase() {
         private var Instance: EstiaSeekDatabase? = null
 
         fun getDatabase(context: Context): EstiaSeekDatabase {
-            // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, EstiaSeekDatabase::class.java, "estiaseek_database")
                     .fallbackToDestructiveMigration()

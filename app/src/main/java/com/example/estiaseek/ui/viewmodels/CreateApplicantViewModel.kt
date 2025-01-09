@@ -1,5 +1,6 @@
 package com.example.estiaseek.ui.viewmodels
 
+import android.net.Uri
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,8 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         bio: String,
         jobTitle: String,
         location: String,
-        experience: String
+        experience: String,
+        photoUri: Uri?
     ): Map<String, String> {
         val errors = mutableMapOf<String, String>()
 
@@ -38,6 +40,9 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         if (experience.isBlank()) {
             errors["experience"] = "experience_required"
         }
+        if (photoUri == null) {
+            errors["photo"] = "photo_required"
+        }
 
         return errors
     }
@@ -49,7 +54,8 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         bio: String,
         jobTitle: String,
         location: String,
-        experience: String
+        experience: String,
+        photoUri: Uri?
     ) {
 
         val user = User(
@@ -58,7 +64,8 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
             bio = bio,
             experience = experience,
             location = location,
-            jobTitle = jobTitle
+            jobTitle = jobTitle,
+            photoUri = photoUri
         )
 
         viewModelScope.launch {
