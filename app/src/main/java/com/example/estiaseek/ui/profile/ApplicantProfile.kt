@@ -1,7 +1,6 @@
 package com.example.estiaseek.ui.profile
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
@@ -24,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -36,8 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -49,199 +47,214 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.estiaseek.ui.components.BottomNavigationBar
+import com.example.estiaseek.ui.components.byteArrayToImageBitmap
+import com.example.estiaseek.ui.navigation.NavigationHelper
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
-import java.io.ByteArrayInputStream
 
 
 @OptIn(UnstableApi::class)
 @Composable
 fun ApplicantProfile(
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavController
 ) {
-    val context = LocalContext.current
-    val profileViewState by profileViewModel.profileViewState.collectAsState()
-
-    // Remember ExoPlayer instance
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/videos/test.mp4")))
-            prepare()
-            playWhenReady = true
-            volume = 0f // Mute by default
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) }
+            )
         }
-    }
+    ) { paddingValues ->
+        Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
+            val context = LocalContext.current
+            val profileViewState by profileViewModel.profileViewState.collectAsState()
 
-    var isMuted by remember { mutableStateOf(true) } // Track mute state
-
-    // Dispose of ExoPlayer correctly
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-    ) {
-        // Video Player Section
-        Box(
-            modifier = Modifier
-                .aspectRatio(16f / 9f)
-                .clickable {
-                    // Toggle mute state on tap
-                    isMuted = !isMuted
-                    exoPlayer.volume = if (isMuted) 0f else 1f
+            // Remember ExoPlayer instance
+            val exoPlayer = remember {
+                ExoPlayer.Builder(context).build().apply {
+                    setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/videos/test.mp4")))
+                    prepare()
+                    playWhenReady = true
+                    volume = 0f // Mute by default
                 }
-        ) {
-            AndroidView(
-                factory = { ctx ->
-                    PlayerView(ctx).apply {
-                        player = exoPlayer
-                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-                        useController = false // Hide video controls
-                    }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-
-            val imageBitmap = byteArrayToImageBitmap(profileViewState.photoData)
-            val title = profileViewState.username
-            val contentDescription = title.takeIf { imageBitmap != null } ?: "Placeholder"
-            imageBitmap?.let { bitmap ->
-                Image(
-                    bitmap = bitmap,
-                    contentDescription = contentDescription,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .offset(x = 16.dp, y = 32.dp)
-                        .size(width = 120.dp, height = 120.dp)
-                        .clip(CircleShape)
-                        .border(4.dp, Color.White, CircleShape)
-                )
-            } ?: run {
-                Image(
-                    painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"),
-                    contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .offset(x = 16.dp, y = 32.dp)
-                        .size(width = 120.dp, height = 120.dp)
-                        .clip(CircleShape)
-                        .border(4.dp, Color.White, CircleShape)
-                )
             }
-        }
 
-        // User Details Section
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 30.dp)
-        ) {
-            // User Name
-            Text(
-                text = profileViewState.username,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
+            var isMuted by remember { mutableStateOf(true) } // Track mute state
 
-            // Location Chip
-            Box(
+            // Dispose of ExoPlayer correctly
+            DisposableEffect(Unit) {
+                onDispose {
+                    exoPlayer.release()
+                }
+            }
+
+            Column(
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        shape = RoundedCornerShape(16.dp)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                // Video Player Section
+                Box(
+                    modifier = Modifier
+                        .aspectRatio(16f / 9f)
+                        .clickable {
+                            // Toggle mute state on tap
+                            isMuted = !isMuted
+                            exoPlayer.volume = if (isMuted) 0f else 1f
+                        }
+                ) {
+                    AndroidView(
+                        factory = { ctx ->
+                            PlayerView(ctx).apply {
+                                player = exoPlayer
+                                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                                useController = false // Hide video controls
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize()
                     )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    text = profileViewState.location,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                )
-            }
 
-            // Bio Section
-            Text(
-                text = profileViewState.bio,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-
-            // Job Title Section
-            Text(
-                text = "Job Title:",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = profileViewState.jobTitle,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            // Experience Section
-            Text(
-                text = "Experience:",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-            Text(
-                text = profileViewState.experience,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            // Contact Section
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                val context = LocalContext.current
-
-                Button(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_DIAL).apply {
-                            data =
-                                Uri.parse("tel:${profileViewState.phoneNumber}")
-                        }
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Call")
+                    val imageBitmap = byteArrayToImageBitmap(profileViewState.photoData)
+                    val title = profileViewState.username
+                    val contentDescription = title.takeIf { imageBitmap != null } ?: "Placeholder"
+                    imageBitmap?.let { bitmap ->
+                        Image(
+                            bitmap = bitmap,
+                            contentDescription = contentDescription,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .offset(x = 16.dp, y = 32.dp)
+                                .size(width = 120.dp, height = 120.dp)
+                                .clip(CircleShape)
+                                .border(4.dp, Color.White, CircleShape)
+                        )
+                    } ?: run {
+                        Image(
+                            painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"),
+                            contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .offset(x = 16.dp, y = 32.dp)
+                                .size(width = 120.dp, height = 120.dp)
+                                .clip(CircleShape)
+                                .border(4.dp, Color.White, CircleShape)
+                        )
+                    }
                 }
 
-                Button(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data =
-                                Uri.parse("mailto:${profileViewState.email}")
-                        }
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier.weight(1f)
+                // User Details Section
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 30.dp)
                 ) {
-                    Text("Email")
+                    // User Name
+                    Text(
+                        text = profileViewState.username,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    // Location Chip
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.secondaryContainer,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = profileViewState.location,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
+
+                    // Bio Section
+                    Text(
+                        text = profileViewState.bio,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+
+                    // Job Title Section
+                    Text(
+                        text = "Job Title:",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                    Text(
+                        text = profileViewState.jobTitle,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    // Experience Section
+                    Text(
+                        text = "Experience:",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                    Text(
+                        text = profileViewState.experience,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    // Contact Section
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        val context = LocalContext.current
+
+                        Button(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_DIAL).apply {
+                                    data =
+                                        Uri.parse("tel:${profileViewState.phoneNumber}")
+                                }
+                                context.startActivity(intent)
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Call")
+                        }
+
+                        Button(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data =
+                                        Uri.parse("mailto:${profileViewState.email}")
+                                }
+                                context.startActivity(intent)
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Email")
+                        }
+
+                    }
                 }
-
             }
-        }
-    }
 
-    // Dispose of ExoPlayer when the composable is disposed
-    DisposableEffect(exoPlayer) {
-        onDispose {
-            exoPlayer.release()
+            // Dispose of ExoPlayer when the composable is disposed
+            DisposableEffect(exoPlayer) {
+                onDispose {
+                    exoPlayer.release()
+                }
+            }
         }
     }
 }
@@ -250,11 +263,7 @@ fun ApplicantProfile(
 @Composable
 fun PreviewApplicantProfile() {
     ApplicantProfile(
-        profileViewModel = ProfileViewModel()
+        profileViewModel = ProfileViewModel(),
+        navController = NavController(LocalContext.current)
     )
-}
-
-fun byteArrayToImageBitmap(imageRes: ByteArray?): ImageBitmap? {
-    val bitmap = BitmapFactory.decodeStream(ByteArrayInputStream(imageRes))
-    return bitmap?.asImageBitmap()
 }

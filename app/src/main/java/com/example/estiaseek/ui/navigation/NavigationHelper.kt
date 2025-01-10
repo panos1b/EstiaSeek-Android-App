@@ -50,6 +50,7 @@ fun NavigationHelper(
         composable(route = NavigationHelper.CreateApplicant.name) {
             CreateApplicant(
                 onCreateApplicantButtonClicked = { navController.navigate(NavigationHelper.Start.name)},
+                navController = navController,
                 viewModel = createApplicantViewModel //fixme
             )
         }
@@ -64,7 +65,8 @@ fun NavigationHelper(
         }
         composable(route = NavigationHelper.Profile.name) {
             ApplicantProfile(
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                navController = navController
             )
         }
         composable(route = NavigationHelper.Search.name) {
