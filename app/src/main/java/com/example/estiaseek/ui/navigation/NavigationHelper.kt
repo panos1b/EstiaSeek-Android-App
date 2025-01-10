@@ -13,6 +13,7 @@ import com.example.estiaseek.ui.viewmodels.CandidateSearchViewModel
 import com.example.estiaseek.ui.profile.CreateApplicant
 import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
 import com.example.estiaseek.ui.HomeScreen
+import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.search.ResultsScreen
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
@@ -23,7 +24,8 @@ enum class NavigationHelper() {
     CreateApplicant,
     ShowResults,
     Profile,
-    Search
+    Search,
+    BottomNavBar
 }
 
 @Composable
@@ -48,19 +50,23 @@ fun NavigationHelper(
         composable(route = NavigationHelper.CreateApplicant.name) {
             CreateApplicant(
                 onCreateApplicantButtonClicked = { navController.navigate(NavigationHelper.Start.name)},
-                 viewModel = createApplicantViewModel //fixme
+                navController = navController,
+                viewModel = createApplicantViewModel //fixme
             )
         }
         composable(route = NavigationHelper.ShowResults.name) {
             ResultsScreen(
                 onProfileClicked = { navController.navigate(NavigationHelper.Profile.name)},
                 searchViewModel = searchViewModel,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                viewModel = viewModel,
+                navController = navController
             )
         }
         composable(route = NavigationHelper.Profile.name) {
             ApplicantProfile(
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                navController = navController
             )
         }
         composable(route = NavigationHelper.Search.name) {
@@ -69,6 +75,12 @@ fun NavigationHelper(
                 searchViewModel = searchViewModel,
                 viewModel = viewModel
                 )
+        }
+        composable(route = NavigationHelper.BottomNavBar.name) {
+            BottomNavigationBar(
+                onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name)},
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name)}
+            )
         }
     }
 

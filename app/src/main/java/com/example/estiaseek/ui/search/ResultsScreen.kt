@@ -1,21 +1,20 @@
 package com.example.estiaseek.ui.search
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
@@ -32,56 +31,46 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.components.ImageCard
+import com.example.estiaseek.ui.navigation.NavigationHelper
+import com.example.estiaseek.ui.viewmodels.CandidateSearchViewModel
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 import com.example.estiaseek.ui.viewmodels.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultsScreen(
-    searchViewModel : SearchViewModel,
-    profileViewModel: ProfileViewModel,
     onProfileClicked: () -> Unit,
+    searchViewModel: SearchViewModel,
+    profileViewModel: ProfileViewModel,
+    viewModel: CandidateSearchViewModel,
+    navController: NavController
 ) {
     val profileViewState by profileViewModel.profileViewState.collectAsState()
-
     val searchUiState by searchViewModel.searchUIState.collectAsState()
+    val searchResults by viewModel.searchResults.collectAsState()
+    var selectedJobTitle by remember { mutableStateOf(searchUiState.selectedJobTitle) }
+    var selectedLocation by remember { mutableStateOf(searchUiState.selectedLocation) }
+    var selectedExperience by remember { mutableStateOf(searchUiState.selectedExperience) }
 
-    //TODO we cant have a full fat nav controller here
-    val navController = rememberNavController()
+    fun updateSearch() {
+        viewModel.searchCandidates(selectedJobTitle, selectedLocation, selectedExperience)
+    }
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            BottomNavigationBar(
+                onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) }
+            )
         }
-    )
-    { paddingValues ->
-        // TODO Clicking on profile should envoke onProfileClicked and updaye state with username
-        // FIXME TEST BUTTON REMOVE WHEN FIXED
-        Button(
-            onClick = {
-                profileViewModel.updateProfileView(
-                    newState = profileViewState.copy(
-                        username = "panos1b"
-                    )
-                )
-                onProfileClicked()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        ) {
-            Text(text = "GO TO PROFILE DEMO BUTTON")
-        }
+    ) { paddingValues ->
         Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
             Row(
                 modifier = Modifier
@@ -106,7 +95,11 @@ fun ResultsScreen(
                 )
             }
 
-            val filters = listOf("Waitress", "Crete", "Senior")
+            val filters = listOf(
+                searchUiState.selectedJobTitle,
+                searchUiState.selectedLocation,
+                searchUiState.selectedExperience
+            )
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -121,10 +114,28 @@ fun ResultsScreen(
                     ) {
                         items(filters.size) { index ->
                             var selected by remember { mutableStateOf(false) }
+
+                            val label = when (index) {
+                                0 -> selectedJobTitle
+                                1 -> selectedLocation
+                                2 -> selectedExperience
+                                else -> ""
+                            }
+
                             InputChip(
                                 selected = selected,
-                                onClick = { selected = !selected },
-                                label = { Text(filters[index]) },
+                                onClick = {
+                                    selected = !selected
+
+                                    when (index) {
+                                        0 -> selectedJobTitle = if (selected) "Any" else searchUiState.selectedJobTitle
+                                        1 -> selectedLocation = if (selected) "Any" else searchUiState.selectedLocation
+                                        2 -> selectedExperience = if (selected) "Any" else searchUiState.selectedExperience
+                                    }
+
+                                    updateSearch()
+                                },
+                                label = { Text(label) },
                                 trailingIcon = {
                                     Icon(
                                         Icons.Default.Close,
@@ -145,74 +156,47 @@ fun ResultsScreen(
                     }
                 }
 
-                item {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .statusBarsPadding()
-                    ) {
-                        items(5) { index ->
-                            ImageCard(
-                                title = "Place ${index + 1}",
-                                imageRes = R.drawable.dummy_restaurant_photo
-                            )
-                        }
-                    }
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.dummy_restaurant_photo),
-                            contentDescription = "Main restaurant",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .height(200.dp)
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                        )
-                    }
-                }
-
-                items(10) { index ->
+                val chunkedResults = searchResults.chunked(2)
+                items(chunkedResults.size) { rowIndex ->
+                    val rowItems = chunkedResults[rowIndex]
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        ImageCard(
-                            title = "Image $index",
-                            imageRes = R.drawable.dummy_restaurant_photo,
-                            modifier = Modifier.weight(1f)
-                        )
-                        ImageCard(
-                            title = "Image ${index + 1}",
-                            imageRes = R.drawable.dummy_restaurant_photo,
-                            modifier = Modifier.weight(1f)
-                        )
+                        rowItems.forEach { item ->
+                            ImageCard(
+                                title = item.name,
+                                imageRes = item.photoData,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(200.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .clickable {
+                                        profileViewModel.updateProfileView(
+                                            newState = profileViewState.copy(
+                                                username = item.name,
+                                                bio = item.bio,
+                                                experience = item.experience,
+                                                email = item.email,
+                                                phoneNumber = item.phoneNumber,
+                                                location = item.location,
+                                                jobTitle = item.jobTitle,
+                                                photoData = item.photoData
+                                            )
+                                        )
+                                        onProfileClicked()
+                                    }
+                            )
+                        }
+
+                        if (rowItems.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = false)
-fun PreviewResults() {
-    ResultsScreen(
-        searchViewModel = SearchViewModel(),
-        profileViewModel = ProfileViewModel(),
-        onProfileClicked = {}
-    )
-}
-
-@Composable
-@Preview(showBackground = false)
-fun PreviewBottomNavigationBar() {
-    val navController = rememberNavController()
-    BottomNavigationBar(navController = navController)
 }

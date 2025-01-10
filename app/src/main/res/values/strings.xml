@@ -4,11 +4,16 @@
     <!-- Create Applicants Strings -->
     <string name="name">Name</string>
     <string name="email">Email</string>
+    <string name="phoneNumber">Phone Number</string>
     <string name="bio">Short Bio</string>
     <string name="create_applicant">Show You\'re Available!</string>
     <string name="submit">Submit</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="photo_required">Photo is required</string>
     <string name="name_required">Name is required.</string>
     <string name="email_required">Valid email is required.</string>
+    <string name="phone_required">Phone number is required.</string>
     <string name="bio_required">Bio is required.</string>
     <string name="job_title_required">Job title is required.</string>
     <string name="location_required">Location is required.</string>
