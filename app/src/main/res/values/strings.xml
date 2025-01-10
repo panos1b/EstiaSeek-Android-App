@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">EstiaSeek</string>
+
+    <string name="welcome">Welcome to EstiaSeek</string>
     
     <!-- Create Applicants Strings -->
     <string name="name">Name</string>
