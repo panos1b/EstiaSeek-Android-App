@@ -31,11 +31,16 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,9 +55,12 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
+import com.example.estiaseek.ui.components.CustomSnackbar
 import com.example.estiaseek.ui.components.DropdownMenuField
 import com.example.estiaseek.ui.navigation.NavigationHelper
 import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.InputStream
 
 @Composable
@@ -61,7 +69,38 @@ fun CreateApplicant(
     viewModel: CreateApplicantViewModel,
     navController: NavController
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    var shouldNavigate by remember { mutableStateOf(false) }
+
+    LaunchedEffect(shouldNavigate) {
+        if (shouldNavigate) {
+            delay(1500)
+            onCreateApplicantButtonClicked()
+            shouldNavigate = false
+        }
+    }
+    val candidateSaved = stringResource(R.string.candidate_saved)
+    val candidateFailed = stringResource(R.string.candidate_saving_failed)
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CustomSnackbar(
+                        snackbarData = data,
+                        backgroundColor = if (data.visuals.message == candidateSaved) {
+                            Color(0xFF388E3C)
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        }
+                    )
+                }
+            }
+        },
         bottomBar = {
             BottomNavigationBar(
                 onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
@@ -418,7 +457,20 @@ fun CreateApplicant(
                                     experience = selectedExperience,
                                     photoData = photoData
                                 )
-                                onCreateApplicantButtonClicked()
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = candidateSaved,
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                shouldNavigate = true
+                            } else {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = candidateFailed,
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier
