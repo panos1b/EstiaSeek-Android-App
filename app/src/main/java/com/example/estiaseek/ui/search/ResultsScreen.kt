@@ -1,5 +1,6 @@
 package com.example.estiaseek.ui.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
@@ -71,24 +71,6 @@ fun ResultsScreen(
             )
         }
     ) { paddingValues ->
-        // TODO Clicking on profile should envoke onProfileClicked and updaye state with username
-        // FIXME TEST BUTTON REMOVE WHEN FIXED
-        Button(
-            onClick = {
-                profileViewModel.updateProfileView(
-                    newState = profileViewState.copy(
-                        username = "panos1b"
-                    )
-                )
-                onProfileClicked()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        ) {
-            Text(text = "GO TO PROFILE DEMO BUTTON")
-        }
-
         Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
             Row(
                 modifier = Modifier
@@ -174,35 +156,42 @@ fun ResultsScreen(
                     }
                 }
 
-                items(searchResults.size / 2 + searchResults.size % 2) { rowIndex ->
+                val chunkedResults = searchResults.chunked(2)
+                items(chunkedResults.size) { rowIndex ->
+                    val rowItems = chunkedResults[rowIndex]
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        val firstItemIndex = rowIndex * 2
-                        val firstItem = searchResults[firstItemIndex]
-                        ImageCard(
-                            title = firstItem.name,
-                            imageRes = R.drawable.dummy_restaurant_photo,
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(200.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                        )
-
-                        if (firstItemIndex + 1 < searchResults.size) {
-                            val secondItem = searchResults[firstItemIndex + 1]
+                        rowItems.forEach { item ->
                             ImageCard(
-                                title = secondItem.name,
-                                imageRes = R.drawable.dummy_restaurant_photo,
+                                title = item.name,
+                                imageRes = item.photoData,
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(200.dp)
                                     .clip(RoundedCornerShape(12.dp))
+                                    .clickable {
+                                        profileViewModel.updateProfileView(
+                                            newState = profileViewState.copy(
+                                                username = item.name,
+                                                bio = item.bio,
+                                                experience = item.experience,
+                                                email = item.email,
+                                                phoneNumber = item.phoneNumber,
+                                                location = item.location,
+                                                jobTitle = item.jobTitle,
+                                                photoData = item.photoData
+                                            )
+                                        )
+                                        onProfileClicked()
+                                    }
                             )
-                        } else {
+                        }
+
+                        if (rowItems.size == 1) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
                     }

@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
@@ -48,7 +50,6 @@ import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.DropdownMenuField
 import com.example.estiaseek.ui.viewmodels.CreateApplicantViewModel
 import java.io.InputStream
-import kotlin.Unit
 
 @Composable
 fun CreateApplicant(
@@ -57,6 +58,7 @@ fun CreateApplicant(
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     var bio by remember { mutableStateOf("") }
     var selectedJobTitle by remember { mutableStateOf("") }
     var selectedLocation by remember { mutableStateOf("") }
@@ -90,6 +92,7 @@ fun CreateApplicant(
     val errorMessagesMap = mapOf(
         "name_required" to context.getString(R.string.name_required),
         "email_required" to context.getString(R.string.email_required),
+        "phone_required" to context.getString(R.string.phone_required),
         "job_title_required" to context.getString(R.string.job_title_required),
         "bio_required" to context.getString(R.string.bio_required),
         "location_required" to context.getString(R.string.location_required),
@@ -189,6 +192,42 @@ fun CreateApplicant(
                 }
             }
 
+            // Phone Number Field with Error Message
+            Column(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = phoneNumber,
+                    onValueChange = { phoneNumber = it },
+                    label = {
+                        Text(
+                            text = stringResource(R.string.phoneNumber),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Left
+                        )
+                    },
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(fieldModifier),
+                    shape = fieldShape,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Call,
+                            contentDescription = null
+                        )
+                    },
+                    singleLine = true
+                )
+                // Show error message for email if present
+                errorMessages["phoneNumber"]?.let {
+                    Text(
+                        text = errorMessagesMap[it] ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+
             // Job Title Dropdown with Error Message
             Column(modifier = Modifier.fillMaxWidth()) {
                 DropdownMenuField(
@@ -222,7 +261,8 @@ fun CreateApplicant(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
                         )
                     },
                     modifier = Modifier
@@ -346,6 +386,7 @@ fun CreateApplicant(
                     errorMessages = viewModel.validateApplicant(
                         name = name,
                         email = email,
+                        phoneNumber = phoneNumber,
                         bio = bio,
                         jobTitle = selectedJobTitle,
                         location = selectedLocation,
@@ -356,6 +397,7 @@ fun CreateApplicant(
                         viewModel.saveApplicant(
                             name = name,
                             email = email,
+                            phoneNumber = phoneNumber,
                             bio = bio,
                             jobTitle = selectedJobTitle,
                             location = selectedLocation,

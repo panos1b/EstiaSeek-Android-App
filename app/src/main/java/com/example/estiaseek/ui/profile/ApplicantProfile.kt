@@ -1,23 +1,43 @@
 package com.example.estiaseek.ui.profile
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +51,7 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import coil.compose.rememberAsyncImagePainter
 import com.example.estiaseek.ui.viewmodels.ProfileViewModel
+import java.io.ByteArrayInputStream
 
 
 @OptIn(UnstableApi::class)
@@ -87,18 +108,34 @@ fun ApplicantProfile(
                 modifier = Modifier.fillMaxSize()
             )
 
-            // com.example.estiaseek.ui.profile.Profile Picture Overlay
-            Image(
-                painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"), // Load from assets
-                contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .offset(x = 16.dp, y = 32.dp)
-                    .size(width = 120.dp, height = 120.dp)
-                    .clip(CircleShape)
-                    .border(4.dp, Color.White, CircleShape)
-            )
+            val imageBitmap = byteArrayToImageBitmap(profileViewState.photoData)
+            val title = profileViewState.username
+            val contentDescription = title.takeIf { imageBitmap != null } ?: "Placeholder"
+            imageBitmap?.let { bitmap ->
+                Image(
+                    bitmap = bitmap,
+                    contentDescription = contentDescription,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .offset(x = 16.dp, y = 32.dp)
+                        .size(width = 120.dp, height = 120.dp)
+                        .clip(CircleShape)
+                        .border(4.dp, Color.White, CircleShape)
+                )
+            } ?: run {
+                Image(
+                    painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"),
+                    contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .offset(x = 16.dp, y = 32.dp)
+                        .size(width = 120.dp, height = 120.dp)
+                        .clip(CircleShape)
+                        .border(4.dp, Color.White, CircleShape)
+                )
+            }
         }
 
         // User Details Section
@@ -109,7 +146,7 @@ fun ApplicantProfile(
         ) {
             // User Name
             Text(
-                text = "Lil Pop - ${profileViewState.username}",
+                text = profileViewState.username,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -125,7 +162,7 @@ fun ApplicantProfile(
                     .padding(horizontal = 12.dp, vertical = 4.dp)
             ) {
                 Text(
-                    text = "Las Vegas, NV",
+                    text = profileViewState.location,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -133,9 +170,21 @@ fun ApplicantProfile(
 
             // Bio Section
             Text(
-                text = "As a dedicated waiter with 87 years of experience in the hospitality industry, I pride myself on delivering exceptional dining experiences through top-tier customer service, attention to detail, and a positive attitude. Whether in fast-paced casual dining or upscale restaurants, I thrive in environments where I can connect with guests, anticipate their needs, and ensure every visit is memorable.",
+                text = profileViewState.bio,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp)
+            )
+
+            // Job Title Section
+            Text(
+                text = "Job Title:",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+            Text(
+                text = profileViewState.jobTitle,
+                style = MaterialTheme.typography.bodyMedium
             )
 
             // Experience Section
@@ -146,9 +195,7 @@ fun ApplicantProfile(
                 modifier = Modifier.padding(top = 16.dp)
             )
             Text(
-                text = "1. Delivered exceptional service in a fast-paced, 100+ seat restaurant, managing up to 8 tables at a time while maintaining a 98% customer satisfaction rating based on guest feedback surveys.\n" +
-                        "2. Increased beverage sales by 20% through effective upselling techniques, menu knowledge, and personalized recommendations tailored to guest preferences.\n" +
-                        "3. Trained and mentored a team of 5 new waitstaff, improving service efficiency and reducing order errors by 15% within the first three months.",
+                text = profileViewState.experience,
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -165,7 +212,7 @@ fun ApplicantProfile(
                     onClick = {
                         val intent = Intent(Intent.ACTION_DIAL).apply {
                             data =
-                                Uri.parse("tel:+1234567890") // Replace with the desired phone number
+                                Uri.parse("tel:${profileViewState.phoneNumber}")
                         }
                         context.startActivity(intent)
                     },
@@ -178,7 +225,7 @@ fun ApplicantProfile(
                     onClick = {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                             data =
-                                Uri.parse("mailto:example@example.com") // Replace with the desired email address
+                                Uri.parse("mailto:${profileViewState.email}")
                         }
                         context.startActivity(intent)
                     },
@@ -205,4 +252,9 @@ fun PreviewApplicantProfile() {
     ApplicantProfile(
         profileViewModel = ProfileViewModel()
     )
+}
+
+fun byteArrayToImageBitmap(imageRes: ByteArray?): ImageBitmap? {
+    val bitmap = BitmapFactory.decodeStream(ByteArrayInputStream(imageRes))
+    return bitmap?.asImageBitmap()
 }

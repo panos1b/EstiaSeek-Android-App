@@ -12,6 +12,8 @@ data class User(
     val name: String,
     @ColumnInfo(name = "Email")
     val email: String,
+    @ColumnInfo(name = "PhoneNumber")
+    val phoneNumber: String,
     @ColumnInfo(name = "Bio")
     val bio: String,
     @ColumnInfo(name = "Experience")

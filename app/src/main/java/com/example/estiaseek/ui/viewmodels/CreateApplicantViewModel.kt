@@ -13,6 +13,7 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
     fun validateApplicant(
         name: String,
         email: String,
+        phoneNumber: String,
         bio: String,
         jobTitle: String,
         location: String,
@@ -26,6 +27,9 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         }
         if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errors["email"] = "email_required"
+        }
+        if (phoneNumber.isBlank() || !Patterns.PHONE.matcher(phoneNumber).matches()) {
+            errors["phoneNumber"] = "phone_required"
         }
         if (jobTitle.isBlank()) {
             errors["jobTitle"] = "job_title_required"
@@ -50,6 +54,7 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
     fun saveApplicant(
         name: String,
         email: String,
+        phoneNumber: String,
         bio: String,
         jobTitle: String,
         location: String,
@@ -60,6 +65,7 @@ class CreateApplicantViewModel(private val usersRepository: UsersRepository) : V
         val user = User(
             name = name,
             email = email,
+            phoneNumber = phoneNumber,
             bio = bio,
             experience = experience,
             location = location,
