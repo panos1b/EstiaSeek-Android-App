@@ -40,7 +40,6 @@
 
     <!-- Job Titles -->
     <string-array name="job_titles">
-        <item>Any</item>
         <item>Server</item>
         <item>Chef</item>
         <item>Bartender</item>
@@ -49,7 +48,6 @@
 
     <!-- Locations -->
     <string-array name="locations">
-        <item>Any</item>
         <item>Attica</item>
         <item>Macedonia and Thrace</item>
         <item>Epirus and Western Macedonia</item>
@@ -62,9 +60,10 @@
 
     <!-- Experience Levels -->
     <string-array name="experience_levels">
-        <item>Any</item>
         <item>Entry Level</item>
         <item>Intermediate</item>
         <item>Senior</item>
     </string-array>
+
+    <string name="any">Any</string>
 </resources>
