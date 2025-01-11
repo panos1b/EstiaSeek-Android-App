@@ -6,6 +6,13 @@ import kotlinx.coroutines.flow.StateFlow
 
 data class ProfileViewState(
     val username: String = "",
+    val bio: String = "",
+    val experience: String = "",
+    val email: String = "",
+    val phoneNumber: String = "",
+    val location: String = "",
+    val jobTitle: String = "",
+    val photoData: ByteArray? = null
 )
 
 

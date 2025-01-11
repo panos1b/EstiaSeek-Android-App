@@ -12,6 +12,8 @@ data class User(
     val name: String,
     @ColumnInfo(name = "Email")
     val email: String,
+    @ColumnInfo(name = "PhoneNumber")
+    val phoneNumber: String,
     @ColumnInfo(name = "Bio")
     val bio: String,
     @ColumnInfo(name = "Experience")
@@ -19,5 +21,7 @@ data class User(
     @ColumnInfo(name = "Location")
     val location: String,
     @ColumnInfo(name = "JobTitle")
-    val jobTitle: String
+    val jobTitle: String,
+    @ColumnInfo(name = "PhotoData")
+    val photoData: ByteArray? = null
 )
