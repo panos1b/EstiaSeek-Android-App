@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,25 +69,27 @@ fun ApplicantProfile(
     val profileViewState by profileViewModel.profileViewState.collectAsState()
     var isMuted by remember { mutableStateOf(true) } // Track mute state
 
+    val videoPath = if (profileViewState.username.trim() == "Lil Pop") {
+        "file:///android_asset/videos/test.mp4" //our evaluation video
+    } else {
+        "file:///android_asset/videos/${profileViewState.jobTitle.trim()}.mp4"
+    }
+
     // Remember ExoPlayer instance
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/videos/test.mp4")))
+            setMediaItem(MediaItem.fromUri(Uri.parse(videoPath)))
             prepare()
             playWhenReady = true
-            volume = 0f // Mute by default
+            volume = if (isMuted) 0f else 1f
         }
     }
 
-    // Dispose of ExoPlayer correctly
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
-        }
+    LaunchedEffect(isMuted) {
+        exoPlayer.volume = if (isMuted) 0f else 1f
     }
 
-
-    // Dispose of ExoPlayer when the composable is disposed
+// Dispose of ExoPlayer correctly
     DisposableEffect(exoPlayer) {
         onDispose {
             exoPlayer.release()
@@ -109,6 +114,7 @@ fun ApplicantProfile(
                     .padding(0.dp)
                     .background(MaterialTheme.colorScheme.background)
                     .verticalScroll(rememberScrollState())
+                    .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
             ) {
                 // Video Player Section
                 Box(
