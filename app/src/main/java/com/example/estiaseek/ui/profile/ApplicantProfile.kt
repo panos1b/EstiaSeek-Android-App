@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +52,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
 import com.example.estiaseek.ui.components.byteArrayToImageBitmap
 import com.example.estiaseek.ui.navigation.NavigationHelper
@@ -59,8 +63,39 @@ import com.example.estiaseek.ui.viewmodels.ProfileViewModel
 @Composable
 fun ApplicantProfile(
     profileViewModel: ProfileViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
+    val context = LocalContext.current
+    val profileViewState by profileViewModel.profileViewState.collectAsState()
+    var isMuted by remember { mutableStateOf(true) } // Track mute state
+
+    val videoPath = if (profileViewState.username.trim() == "Lil Pop") {
+        "file:///android_asset/videos/test.mp4" //our evaluation video
+    } else {
+        "file:///android_asset/videos/${profileViewState.jobTitle.trim()}.mp4"
+    }
+
+    // Remember ExoPlayer instance
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            setMediaItem(MediaItem.fromUri(Uri.parse(videoPath)))
+            prepare()
+            playWhenReady = true
+            volume = if (isMuted) 0f else 1f
+        }
+    }
+
+    LaunchedEffect(isMuted) {
+        exoPlayer.volume = if (isMuted) 0f else 1f
+    }
+
+// Dispose of ExoPlayer correctly
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
@@ -69,34 +104,17 @@ fun ApplicantProfile(
             )
         }
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(0.dp).padding(paddingValues)) {
-            val context = LocalContext.current
-            val profileViewState by profileViewModel.profileViewState.collectAsState()
-
-            // Remember ExoPlayer instance
-            val exoPlayer = remember {
-                ExoPlayer.Builder(context).build().apply {
-                    setMediaItem(MediaItem.fromUri(Uri.parse("file:///android_asset/videos/test.mp4")))
-                    prepare()
-                    playWhenReady = true
-                    volume = 0f // Mute by default
-                }
-            }
-
-            var isMuted by remember { mutableStateOf(true) } // Track mute state
-
-            // Dispose of ExoPlayer correctly
-            DisposableEffect(Unit) {
-                onDispose {
-                    exoPlayer.release()
-                }
-            }
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(0.dp)
                     .background(MaterialTheme.colorScheme.background)
                     .verticalScroll(rememberScrollState())
+                    .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
             ) {
                 // Video Player Section
                 Box(
@@ -121,7 +139,8 @@ fun ApplicantProfile(
 
                     val imageBitmap = byteArrayToImageBitmap(profileViewState.photoData)
                     val title = profileViewState.username
-                    val contentDescription = title.takeIf { imageBitmap != null } ?: "Placeholder"
+                    val contentDescription =
+                        title.takeIf { imageBitmap != null } ?: "Placeholder"
                     imageBitmap?.let { bitmap ->
                         Image(
                             bitmap = bitmap,
@@ -136,8 +155,8 @@ fun ApplicantProfile(
                         )
                     } ?: run {
                         Image(
-                            painter = rememberAsyncImagePainter("file:///android_asset/images/lilpop.jpg"),
-                            contentDescription = "com.example.estiaseek.ui.profile.Profile Picture",
+                            painter = painterResource(id = R.drawable.lilpop),
+                            contentDescription = "Profile Picture",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
@@ -210,49 +229,52 @@ fun ApplicantProfile(
                         style = MaterialTheme.typography.bodyMedium
                     )
 
-                    // Contact Section
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        val context = LocalContext.current
-
-                        Button(
-                            onClick = {
-                                val intent = Intent(Intent.ACTION_DIAL).apply {
-                                    data =
-                                        Uri.parse("tel:${profileViewState.phoneNumber}")
-                                }
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text("Call")
-                        }
-
-                        Button(
-                            onClick = {
-                                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                    data =
-                                        Uri.parse("mailto:${profileViewState.email}")
-                                }
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text("Email")
-                        }
-
-                    }
                 }
             }
 
-            // Dispose of ExoPlayer when the composable is disposed
-            DisposableEffect(exoPlayer) {
-                onDispose {
-                    exoPlayer.release()
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(paddingValues)
+                    .padding(5.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp) // Optional spacing between elements
+            ) {
+                // Contact Section
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    val context = LocalContext.current
+
+                    Button(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_DIAL).apply {
+                                data =
+                                    Uri.parse("tel:${profileViewState.phoneNumber}")
+                            }
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Call")
+                    }
+
+                    Button(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                data =
+                                    Uri.parse("mailto:${profileViewState.email}")
+                            }
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Email")
+                    }
+
                 }
             }
         }
