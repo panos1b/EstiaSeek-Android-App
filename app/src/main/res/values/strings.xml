@@ -4,7 +4,7 @@
     <!-- Home screen Strings -->
     <string name="welcome">Welcome to EstiaSeek</string>
     <string name="search_button">Search for Candidates</string>
-    <string name="form_button">Create Candidates</string>
+    <string name="form_button">Create Candidate</string>
 
     <!-- Create Applicants Strings -->
     <string name="name">Name</string>
@@ -18,13 +18,13 @@
     <string name="photo_required">Photo is required</string>
     <string name="name_required">Name is required.</string>
     <string name="email_required">Valid email is required.</string>
-    <string name="phone_required">Phone number is required.</string>
+    <string name="phone_required">Valid phone number is required.</string>
     <string name="bio_required">Bio is required.</string>
     <string name="job_title_required">Job title is required.</string>
     <string name="location_required">Location is required.</string>
     <string name="experience_required">Experience level is required.</string>
     <string name="candidate_saved">Candidate saved successfully! </string>
-    <string name="candidate_saving_failed">Fill all the fields!</string>
+    <string name="candidate_saving_failed">Please fill out all fields!</string>
 
     <!-- Search Candidates Strings -->
     <string name="results">Results</string>
