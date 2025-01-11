@@ -130,7 +130,7 @@ fun HomeScreen(
                         )
                     ) {
                         Text(
-                            text = "Search for Candidates",
+                            text = stringResource(R.string.search_button),
                             color = Color.White,
                             fontSize = 14.sp
                         )
@@ -146,7 +146,7 @@ fun HomeScreen(
                         )
                     ) {
                         Text(
-                            text = "Create Candidates",
+                            text = stringResource(R.string.form_button),
                             fontSize = 14.sp
                         )
                     }

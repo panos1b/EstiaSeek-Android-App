@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">EstiaSeek</string>
 
+    <!-- Home screen Strings -->
     <string name="welcome">Welcome to EstiaSeek</string>
-    
+    <string name="search_button">Search for Candidates</string>
+    <string name="form_button">Create Candidates</string>
     <!-- Create Applicants Strings -->
     <string name="name">Name</string>
     <string name="email">Email</string>
