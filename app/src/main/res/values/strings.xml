@@ -33,6 +33,9 @@
     <string name="search">Search</string>
     <string name="search_message">Find the perfect candidate for your position!</string>
 
+    <!-- Profile Screen Strings -->
+    <string name="call">Call</string>
+
     <!-- Common Strings -->
     <string name="job_title">Job Title</string>
     <string name="location">Location</string>

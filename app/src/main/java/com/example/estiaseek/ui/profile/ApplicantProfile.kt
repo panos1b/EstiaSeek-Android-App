@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -207,7 +208,7 @@ fun ApplicantProfile(
 
                     // Job Title Section
                     Text(
-                        text = "Job Title:",
+                        text = stringResource(R.string.job_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 16.dp)
@@ -219,7 +220,7 @@ fun ApplicantProfile(
 
                     // Experience Section
                     Text(
-                        text = "Experience:",
+                        text = stringResource(R.string.experience_level),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 16.dp)
@@ -259,7 +260,7 @@ fun ApplicantProfile(
                         },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Call")
+                        Text(stringResource(R.string.call))
                     }
 
                     Button(
@@ -272,7 +273,7 @@ fun ApplicantProfile(
                         },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Email")
+                        Text(stringResource(R.string.email))
                     }
 
                 }
