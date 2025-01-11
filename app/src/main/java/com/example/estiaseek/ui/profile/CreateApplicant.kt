@@ -108,7 +108,7 @@ fun CreateApplicant(
             )
         }
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
+        Column(modifier = Modifier.padding(0.dp).padding(paddingValues)) {
             var name by remember { mutableStateOf("") }
             var email by remember { mutableStateOf("") }
             var phoneNumber by remember { mutableStateOf("") }

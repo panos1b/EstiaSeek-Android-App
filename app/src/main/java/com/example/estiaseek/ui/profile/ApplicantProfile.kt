@@ -69,7 +69,7 @@ fun ApplicantProfile(
             )
         }
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(35.dp).padding(paddingValues)) {
+        Column(modifier = Modifier.padding(0.dp).padding(paddingValues)) {
             val context = LocalContext.current
             val profileViewState by profileViewModel.profileViewState.collectAsState()
 
