@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.estiaseek.R
 import com.example.estiaseek.ui.components.BottomNavigationBar
@@ -71,7 +71,7 @@ fun ResultsScreen(
             )
         }
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(0.dp).padding(paddingValues)) {
+        Column(modifier = Modifier.padding(20.dp).padding(paddingValues)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -79,7 +79,10 @@ fun ResultsScreen(
             ) {
                 Text(
                     text = stringResource(R.string.results),
-                    fontSize = 35.sp
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -90,8 +93,9 @@ fun ResultsScreen(
             ) {
                 Text(
                     text = stringResource(R.string.results_based_on_search_terms),
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
 
