@@ -18,7 +18,9 @@ import com.example.estiaseek.R
 @Composable
 fun BottomNavigationBar(
     onSearchIconClicked: () -> Unit,
-    onStartIconClicked: () -> Unit
+    onStartIconClicked: () -> Unit,
+    showSearchIcon: Boolean = true,
+    showStartIcon: Boolean = true
 ) {
     BottomAppBar(
         modifier = Modifier
@@ -30,27 +32,31 @@ fun BottomNavigationBar(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            IconButton(
-                onClick = {
-                    onSearchIconClicked()
+            if (showSearchIcon) {
+                IconButton(
+                    onClick = {
+                        onSearchIconClicked()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.search_interface_symbol),
+                        contentDescription = "Search",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
                 }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.search_interface_symbol),
-                    contentDescription = "Search",
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
             }
-            IconButton(
-                onClick = {
-                    onStartIconClicked()
+            if (showStartIcon) {
+                IconButton(
+                    onClick = {
+                        onStartIconClicked()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
                 }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.home),
-                    contentDescription = "Home",
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
             }
         }
     }
