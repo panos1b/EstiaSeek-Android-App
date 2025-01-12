@@ -55,6 +55,9 @@ fun ResultsScreen(
     val profileViewState by profileViewModel.profileViewState.collectAsState()
     val searchUiState by searchViewModel.searchUIState.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
+    val anyOption = stringResource(R.string.any)
+
+    // Retain the actual values, but display "Any" if empty
     var selectedJobTitle by remember { mutableStateOf(searchUiState.selectedJobTitle) }
     var selectedLocation by remember { mutableStateOf(searchUiState.selectedLocation) }
     var selectedExperience by remember { mutableStateOf(searchUiState.selectedExperience) }
@@ -99,10 +102,11 @@ fun ResultsScreen(
                 )
             }
 
+            // Use "Any" if the selected filter is empty
             val filters = listOf(
-                searchUiState.selectedJobTitle,
-                searchUiState.selectedLocation,
-                searchUiState.selectedExperience
+                selectedJobTitle.ifEmpty { anyOption },
+                selectedLocation.ifEmpty { anyOption },
+                selectedExperience.ifEmpty { anyOption }
             )
 
             LazyColumn(
@@ -120,9 +124,9 @@ fun ResultsScreen(
                             var selected by remember { mutableStateOf(false) }
 
                             val label = when (index) {
-                                0 -> selectedJobTitle
-                                1 -> selectedLocation
-                                2 -> selectedExperience
+                                0 -> filters[0]
+                                1 -> filters[1]
+                                2 -> filters[2]
                                 else -> ""
                             }
 
@@ -132,9 +136,9 @@ fun ResultsScreen(
                                     selected = !selected
 
                                     when (index) {
-                                        0 -> selectedJobTitle = if (selected) "Any" else searchUiState.selectedJobTitle
-                                        1 -> selectedLocation = if (selected) "Any" else searchUiState.selectedLocation
-                                        2 -> selectedExperience = if (selected) "Any" else searchUiState.selectedExperience
+                                        0 -> selectedJobTitle = if (selected) "" else searchUiState.selectedJobTitle
+                                        1 -> selectedLocation = if (selected) "" else searchUiState.selectedLocation
+                                        2 -> selectedExperience = if (selected) "" else searchUiState.selectedExperience
                                     }
 
                                     updateSearch()

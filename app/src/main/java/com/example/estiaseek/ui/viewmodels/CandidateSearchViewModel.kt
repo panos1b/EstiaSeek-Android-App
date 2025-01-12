@@ -19,9 +19,9 @@ class CandidateSearchViewModel(private val repository: UsersRepository) : ViewMo
             repository.getAllUsersStream()
                 .collect { users ->
                     _searchResults.value = users.filter { user ->
-                        (jobTitle == "Any" || user.jobTitle == jobTitle) &&
-                                (location == "Any" || user.location == location) &&
-                                (experience == "Any" || user.experience == experience)
+                        (jobTitle.isEmpty() || user.jobTitle == jobTitle) &&
+                                (location.isEmpty() || user.location == location) &&
+                                (experience.isEmpty() || user.experience == experience)
                     }
                 }
         }

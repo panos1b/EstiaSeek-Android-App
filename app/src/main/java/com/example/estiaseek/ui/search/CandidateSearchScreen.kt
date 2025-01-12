@@ -50,9 +50,11 @@ fun CandidateSearchScreen(
     val context = LocalContext.current
 
     // Get the string arrays from resources and add "Any" option at the start
-    val jobTitles = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.job_titles).toList()
-    val locations = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.locations).toList()
-    val experienceLevels = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.experience_levels).toList()
+    val anyOption = stringResource(R.string.any)
+
+    val jobTitles = listOf(anyOption) + context.resources.getStringArray(R.array.job_titles).toList()
+    val locations = listOf(anyOption) + context.resources.getStringArray(R.array.locations).toList()
+    val experienceLevels = listOf(anyOption) + context.resources.getStringArray(R.array.experience_levels).toList()
 
     Scaffold(
         bottomBar = {
@@ -125,7 +127,7 @@ fun CandidateSearchScreen(
                             DropdownMenuField(
                                 label = R.string.job_title,
                                 options = jobTitles,
-                                selectedOption = searchUiState.selectedJobTitle,
+                                selectedOption = searchUiState.selectedJobTitle.ifEmpty { anyOption },
                                 onOptionSelected = {
                                     searchViewModel.updateSearchState(
                                         newState = searchUiState.copy(
@@ -136,11 +138,11 @@ fun CandidateSearchScreen(
                                 icon = Icons.Rounded.Person,
                                 modifier = Modifier.fillMaxWidth()
                             )
-
+                            
                             DropdownMenuField(
                                 label = R.string.location,
                                 options = locations,
-                                selectedOption = searchUiState.selectedLocation,
+                                selectedOption = searchUiState.selectedLocation.ifEmpty { anyOption },
                                 onOptionSelected = {
                                     searchViewModel.updateSearchState(
                                         newState = searchUiState.copy(
@@ -155,7 +157,7 @@ fun CandidateSearchScreen(
                             DropdownMenuField(
                                 label = R.string.experience_level,
                                 options = experienceLevels,
-                                selectedOption = searchUiState.selectedExperience,
+                                selectedOption = searchUiState.selectedExperience.ifEmpty { anyOption },
                                 onOptionSelected = {
                                     searchViewModel.updateSearchState(
                                         newState = searchUiState.copy(
