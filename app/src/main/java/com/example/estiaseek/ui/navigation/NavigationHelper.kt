@@ -73,7 +73,8 @@ fun NavigationHelper(
             CandidateSearchScreen(
                 onSearchButtonClicked = { navController.navigate(NavigationHelper.ShowResults.name)},
                 searchViewModel = searchViewModel,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navController = navController
                 )
         }
         composable(route = NavigationHelper.BottomNavBar.name) {
@@ -83,7 +84,6 @@ fun NavigationHelper(
             )
         }
     }
-
 }
 
 
