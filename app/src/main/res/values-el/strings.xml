@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">EstiaSeek</string>
+
+    <!-- Home screen Strings -->
+    <string name="welcome">Καλώς ήρθατε στο EstiaSeek</string>
+    <string name="search_button">Αναζήτηση Υποψηφίων</string>
+    <string name="form_button">Δημιουργία Υποψηφίου</string>
+
+    <!-- Create Applicants Strings -->
+    <string name="name">Όνομα</string>
+    <string name="email">Email</string>
+    <string name="phoneNumber">Αριθμός Τηλεφώνου</string>
+    <string name="bio">Σύντομο Βιογραφικό</string>
+    <string name="create_applicant">Δείξτε ότι είστε διαθέσιμοι!</string>
+    <string name="submit">Υποβολή</string>
+    <string name="upload_photo">Μεταφόρτωση Φωτογραφίας</string>
+    <string name="change_photo">Αλλαγή Φωτογραφίας</string>
+    <string name="photo_required">Απαιτείται φωτογραφία</string>
+    <string name="name_required">Το όνομα είναι απαραίτητο.</string>
+    <string name="email_required">Απαιτείται έγκυρο email.</string>
+    <string name="phone_required">Απαιτείται έγκυρος αριθμός τηλεφώνου.</string>
+    <string name="bio_required">Απαιτείται βιογραφικό.</string>
+    <string name="job_title_required">Απαιτείται τίτλος εργασίας.</string>
+    <string name="location_required">Απαιτείται τοποθεσία.</string>
+    <string name="experience_required">Απαιτείται επίπεδο εμπειρίας.</string>
+    <string name="candidate_saved">Ο υποψήφιος αποθηκεύτηκε με επιτυχία!</string>
+    <string name="candidate_saving_failed">Παρακαλούμε συμπληρώστε όλα τα πεδία!</string>
+
+    <!-- Search Candidates Strings -->
+    <string name="results">Αποτελέσματα</string>
+    <string name="results_based_on_search_terms">Αποτελέσματα βάσει των όρων αναζήτησης</string>
+    <string name="search_candidates">Αναζήτηση Υποψηφίων</string>
+    <string name="search">Αναζήτηση</string>
+    <string name="search_message">Βρείτε τον ιδανικό υποψήφιο για τη θέση που αναζητείτε!</string>
+
+    <string name="call">Κλήση</string>
+
+    <!-- Common Strings -->
+    <string name="job_title">Τίτλος Εργασίας</string>
+    <string name="location">Τοποθεσία</string>
+    <string name="experience_level">Επίπεδο Εμπειρίας</string>
+
+    <!-- Job Titles -->
+    <string-array name="job_titles">
+        <item>Σερβιτόρος</item>
+        <item>Μάγειρας</item>
+        <item>Μπάρμαν</item>
+        <item>Υποδοχή</item>
+    </string-array>
+
+    <!-- Locations -->
+    <string-array name="locations">
+        <item>Αττική</item>
+        <item>Μακεδονία και Θράκη</item>
+        <item>Ήπειρος και Δυτική Μακεδονία</item>
+        <item>Θεσσαλία και Κεντρική Ελλάδα</item>
+        <item>Πελοπόννησος και Δυτική Ελλάδα</item>
+        <item>Αιγαίο</item>
+        <item>Κρήτη</item>
+        <item>Αγιορείτικη Μοναστική Κοινότητα</item>
+    </string-array>
+
+    <!-- Experience Levels -->
+    <string-array name="experience_levels">
+        <item>Αρχάριο</item>
+        <item>Μεσαίο</item>
+        <item>Προχωρημένο</item>
+    </string-array>
+
+    <string name="any">Οτιδήποτε</string>
+</resources>

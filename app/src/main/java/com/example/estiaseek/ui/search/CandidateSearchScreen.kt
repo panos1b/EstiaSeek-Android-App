@@ -138,7 +138,7 @@ fun CandidateSearchScreen(
                                 icon = Icons.Rounded.Person,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            
+
                             DropdownMenuField(
                                 label = R.string.location,
                                 options = locations,
