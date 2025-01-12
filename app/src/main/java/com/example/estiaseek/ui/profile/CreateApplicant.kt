@@ -133,10 +133,10 @@ fun CreateApplicant(
                 }
             }
 
-            // Get the string arrays from resources
-            val jobTitles = context.resources.getStringArray(R.array.job_titles).toList()
-            val locations = context.resources.getStringArray(R.array.locations).toList()
-            val experienceLevels = context.resources.getStringArray(R.array.experience_levels).toList()
+            // Get the string arrays from resources with empty string as first option
+            val jobTitles = listOf("") + context.resources.getStringArray(R.array.job_titles).toList()
+            val locations = listOf("") + context.resources.getStringArray(R.array.locations).toList()
+            val experienceLevels = listOf("") + context.resources.getStringArray(R.array.experience_levels).toList()
 
             val fieldShape = RoundedCornerShape(8.dp)
             val fieldModifier = Modifier.height(75.dp)

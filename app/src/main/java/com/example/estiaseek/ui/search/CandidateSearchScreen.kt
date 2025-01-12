@@ -44,10 +44,10 @@ fun CandidateSearchScreen(
 
     val context = LocalContext.current
 
-    // Get the string arrays from resources
-    val jobTitles = context.resources.getStringArray(R.array.job_titles).toList()
-    val locations = context.resources.getStringArray(R.array.locations).toList()
-    val experienceLevels = context.resources.getStringArray(R.array.experience_levels).toList()
+    // Get the string arrays from resources and add "Any" option at the start
+    val jobTitles = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.job_titles).toList()
+    val locations = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.locations).toList()
+    val experienceLevels = listOf(context.getString(R.string.any)) + context.resources.getStringArray(R.array.experience_levels).toList()
 
     Box(
         modifier = Modifier
