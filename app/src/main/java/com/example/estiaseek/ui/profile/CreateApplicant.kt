@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -165,13 +166,24 @@ fun CreateApplicant(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp) // Space between elements
                 ) {
-                    Text(
-                        text = stringResource(R.string.create_applicant),
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier
-                            .padding(bottom = 16.dp, top = 40.dp)
-                            .align(Alignment.CenterHorizontally)
-                    )
+                    Column(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.create_applicant),
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = stringResource(R.string.create_information),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
 
                     // Name Field with Error Message
                     Column(modifier = Modifier.fillMaxWidth()) {

@@ -89,6 +89,7 @@ fun CandidateSearchScreen(
                 ) {
                     // Header Section
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(bottom = 16.dp)
                     ) {
                         Text(
