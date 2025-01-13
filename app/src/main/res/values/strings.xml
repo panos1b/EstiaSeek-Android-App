@@ -12,6 +12,7 @@
     <string name="phoneNumber">Phone Number</string>
     <string name="bio">Short Bio</string>
     <string name="create_applicant">Show You\'re Available!</string>
+    <string name="create_information">Fill in your information!</string>
     <string name="submit">Submit</string>
     <string name="upload_photo">Upload Photo</string>
     <string name="change_photo">Change Photo</string>
