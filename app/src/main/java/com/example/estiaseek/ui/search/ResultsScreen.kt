@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,7 @@ fun ResultsScreen(
     var selectedLocation by remember { mutableStateOf(searchUiState.selectedLocation) }
     var selectedExperience by remember { mutableStateOf(searchUiState.selectedExperience) }
 
-    fun updateSearch() {
+    LaunchedEffect(selectedJobTitle, selectedLocation, selectedExperience) {
         viewModel.searchCandidates(selectedJobTitle, selectedLocation, selectedExperience)
     }
 
@@ -136,8 +137,6 @@ fun ResultsScreen(
                                         1 -> selectedLocation = if (selected) "Any" else searchUiState.selectedLocation
                                         2 -> selectedExperience = if (selected) "Any" else searchUiState.selectedExperience
                                     }
-
-                                    updateSearch()
                                 },
                                 label = { Text(label) },
                                 trailingIcon = {
