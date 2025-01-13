@@ -230,6 +230,12 @@ fun ApplicantProfile(
                             text = profileViewState.experience,
                             style = MaterialTheme.typography.bodyMedium
                         )
+
+                        // This adds a line of padding when scrolled all the way down without
+                        // impeding on the viewable area when not scrolled
+                        Text(
+                            text = "\n"
+                        )
                     }
 
                 }
