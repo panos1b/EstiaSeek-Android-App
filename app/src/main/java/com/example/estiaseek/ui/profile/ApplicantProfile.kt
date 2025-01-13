@@ -7,8 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -114,8 +112,6 @@ fun ApplicantProfile(
                     .fillMaxSize()
                     .padding(0.dp)
                     .background(MaterialTheme.colorScheme.background)
-                    .verticalScroll(rememberScrollState())
-                    .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
             ) {
                 // Video Player Section
                 Box(
@@ -198,37 +194,49 @@ fun ApplicantProfile(
                             color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
+                    Column(
+                        modifier = Modifier
+                        .padding(bottom = 100.dp)
+                        .verticalScroll(rememberScrollState())
+                    )
+                    {
+                        // Bio Section
+                        Text(
+                            text = profileViewState.bio,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
 
-                    // Bio Section
-                    Text(
-                        text = profileViewState.bio,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                        // Job Title Section
+                        Text(
+                            text = stringResource(R.string.job_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        Text(
+                            text = profileViewState.jobTitle,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
 
-                    // Job Title Section
-                    Text(
-                        text = stringResource(R.string.job_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                    Text(
-                        text = profileViewState.jobTitle,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                        // Experience Section
+                        Text(
+                            text = stringResource(R.string.experience_level),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        Text(
+                            text = profileViewState.experience,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
 
-                    // Experience Section
-                    Text(
-                        text = stringResource(R.string.experience_level),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                    Text(
-                        text = profileViewState.experience,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                        // This adds a line of padding when scrolled all the way down without
+                        // impeding on the viewable area when not scrolled
+                        Text(
+                            text = "\n"
+                        )
+                    }
 
                 }
             }
