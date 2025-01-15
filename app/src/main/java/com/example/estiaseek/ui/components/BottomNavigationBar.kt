@@ -19,8 +19,10 @@ import com.example.estiaseek.R
 fun BottomNavigationBar(
     onSearchIconClicked: () -> Unit,
     onStartIconClicked: () -> Unit,
+    onAddIconClicked: () -> Unit,
     showSearchIcon: Boolean = true,
-    showStartIcon: Boolean = true
+    showStartIcon: Boolean = true,
+    showAddIcon: Boolean = true
 ) {
     BottomAppBar(
         modifier = Modifier
@@ -44,6 +46,19 @@ fun BottomNavigationBar(
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
+            } else {
+                IconButton(
+                    enabled = false ,
+                    onClick = {
+                        onSearchIconClicked()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.search_screen),
+                        contentDescription = "Search",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
             }
             if (showStartIcon) {
                 IconButton(
@@ -54,6 +69,32 @@ fun BottomNavigationBar(
                     Image(
                         painter = painterResource(id = R.drawable.home),
                         contentDescription = "Home",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
+            }
+            if (showAddIcon) {
+                IconButton(
+                    onClick = {
+                        onAddIconClicked()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.add_applicant_icon),
+                        contentDescription = "Add",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
+            } else {
+                IconButton(
+                    enabled = false ,
+                    onClick = {
+                        onAddIconClicked()
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.add_icon),
+                        contentDescription = "Add",
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }

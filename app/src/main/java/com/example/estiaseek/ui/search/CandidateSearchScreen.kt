@@ -59,6 +59,7 @@ fun CandidateSearchScreen(
             BottomNavigationBar(
                 onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
                 onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) },
+                onAddIconClicked = { navController.navigate(NavigationHelper.CreateApplicant.name) },
                 showSearchIcon = false
             )
         }

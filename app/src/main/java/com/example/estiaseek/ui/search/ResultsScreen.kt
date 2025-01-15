@@ -68,7 +68,8 @@ fun ResultsScreen(
         bottomBar = {
             BottomNavigationBar(
                 onSearchIconClicked = { navController.navigate(NavigationHelper.Search.name) },
-                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) }
+                onStartIconClicked = { navController.navigate(NavigationHelper.Start.name) },
+                onAddIconClicked = { navController.navigate(NavigationHelper.CreateApplicant.name) }
             )
         }
     ) { paddingValues ->
